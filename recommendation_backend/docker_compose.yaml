@@ -1,0 +1,15 @@
+services:
+  mysql:
+    image: 'mysql/mysql-server:latest'
+    container_name: recommendation_backend
+    environment:
+      - 'MYSQL_DATABASE=recommendation_backend'
+      - 'MYSQL_USER=root'
+      - 'MYSQL_PASSWORD=123456Aa'
+      - 'MYSQL_ROOT_PASSWORD=123456Aa'
+    ports:
+      - '3307:3306/tcp'
+    restart: unless-stopped
+
+
+# docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=123456Aa" -e "MSSQL_PID=Developer" -e "MSSQL_USER=root" -p 1433:1433 -d --name=backend mysql/mysql-server:latest
