@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 # Database Connection URL (Use `host.docker.internal` for Docker MySQL)
 DATABASE_URL = "mysql+mysqlconnector://root:123456Aa@localhost:3307/recommendation_backend"
@@ -12,6 +13,9 @@ DATABASE_URL = "mysql+mysqlconnector://root:123456Aa@localhost:3307/recommendati
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+
+
 
 # Define a Sample Model
 class User(Base):
@@ -25,6 +29,14 @@ Base.metadata.create_all(bind=engine)
 # FastAPI App
 app = FastAPI()
 
+# Add CORS middleware to the FastAPI app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # List of allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
