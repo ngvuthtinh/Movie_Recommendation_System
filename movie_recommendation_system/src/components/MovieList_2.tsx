@@ -1,8 +1,8 @@
-import { Poster } from '../types/Poster';
+import { I_MovieList2 } from '../types/I_MovieList2.ts';
 
-export default function MovieList_3() {
+export default function MovieList_2() {
     const url = 'https://image.tmdb.org/t/p/original';
-    const posters: Poster[] = [
+    const posters: I_MovieList2[] = [
         {
             id: 27205,
             title: 'Inception',

@@ -1,10 +1,10 @@
 import './App.css'
-import MovieList_3 from './components/MovieList_3.tsx'
+import MovieList_2 from './components/MovieList_2.tsx'
 
 function App() {
   return (
     <>
-      <MovieList_3 />
+        <MovieList_2 />
     </>
   )
 }

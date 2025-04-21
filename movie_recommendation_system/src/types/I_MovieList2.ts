@@ -1,4 +1,4 @@
-export interface Poster {
+export interface I_MovieList2 {
     id: number;
     title: string;
     description: string;
