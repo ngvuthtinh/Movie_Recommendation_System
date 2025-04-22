@@ -5,6 +5,26 @@ import { FaHeart, FaStar } from "react-icons/fa";
 
 export default function MovieList_1() {
     const url = 'https://image.tmdb.org/t/p/original';
+    // Function to get the color based on the match percentage
+    const getMatchColor = (match: number): string => {
+        if (match >= 80) return "text-green-400"; // Excellent match
+        if (match >= 50) return "text-yellow-400"; // Average match
+        if (match >= 30) return "text-orange-400"; // Below average
+        return "text-red-500"; // Poor match
+    };
+
+    // Function to get the font based on the match percentage
+    const getMatchFont = (match: number): string => {
+        if (match >= 90) return "font-bold"; // Excellent match
+        return "font-normal"; // Poor match
+    };
+
+    // Function to get the color based on the watched status
+    const getColor = (isBoolean: boolean): string => {
+        return isBoolean ? "text-red-500" : "text-gray-500"; // Change color based on watched status
+    };
+
+
     const posters: I_MovieList1[] = [
         {
             id: 27205,
@@ -27,8 +47,8 @@ export default function MovieList_1() {
             runtime: 169,
             tagline: 'Mankind was born on Earth. It was never meant to die here.',
             match: 80,
-            isWatched: false,
-            isLoved: false,
+            isWatched: true,
+            isLoved: true,
         },
         {
             id: 155,
@@ -39,7 +59,7 @@ export default function MovieList_1() {
             runtime: 152,
             tagline: 'Welcome to a world without rules.',
             match: 70,
-            isWatched: false,
+            isWatched: true,
             isLoved: false,
         },
         {
@@ -52,7 +72,7 @@ export default function MovieList_1() {
             tagline: 'Enter the world of Pandora.',
             match: 50,
             isWatched: false,
-            isLoved: false,
+            isLoved: true,
         },
     ];
     const postersProcess = posters.map((poster) => ({
@@ -76,10 +96,9 @@ export default function MovieList_1() {
                         hover:scale-110 transition-all duration-300"
                     />
                     <div className="">
-                        <div className="flex mt-4 items-center gap-2">
+                        <div className="flex mt-4 items-center justify-between">
                             <h2 className="text-white text-xl font-bold">{poster.title}</h2>
-
-                            <div className="flex items-center gap-1 justify-end">
+                            <div className="flex items-center gap-2">
                                 <p className="text-yellow-300 text-xl font-bold">{poster.vote_average}</p>
                                 <FaStar className="text-yellow-300 text-xl" />
                             </div>
@@ -94,13 +113,17 @@ export default function MovieList_1() {
                             <p className="text-white text-sm font-normal">⋮</p>
                             <p className="text-white text-sm font-normal">{poster.runtime}</p>
                             <p className="text-white text-sm font-normal">⋮</p>
-                            <p className="text-green-500 text-sm font-normal">{poster.match}% Match</p>
+                            <p className={`${getMatchColor(poster.match)} text-sm ${getMatchFont(poster.match)}`}>{poster.match}% Match</p>
+
                         </div>
 
-                        <div className="flex mt-2 gap-4 items-center">
+                        <div className="flex mt-2 gap-4 items-center justify-between">
                             <p className="text-white text-base font-normal">{poster.tagline}</p>
-                            <FaHeart className="text-gray-500" />
-                            <IoMdEye className="text-gray-500" />
+                            <div className="flex gap-4 items-center">
+                                <FaHeart className={`${getColor(poster.isLoved)} text-base font-normal size-5`} />
+                                <IoMdEye className={`${getColor(poster.isWatched)} text-base font-normal size-7`} />
+                            </div>
+
                         </div>
 
                     </div>
