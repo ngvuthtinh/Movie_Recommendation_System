@@ -6,9 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { LoginFormValues } from "../types/auth"
 
 export default function LoginForm() {
-  // Goi ra nhung thuoc tinh can thiet tu useForm
   const {
-    register,
+    register, // Lien ket voi input, xu ly loi
     handleSubmit,
     formState: { errors }
   } = useForm<LoginFormValues>()
