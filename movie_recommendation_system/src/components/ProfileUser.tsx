@@ -1,14 +1,14 @@
-import React, { useState, useTransition } from "react";
-import { ProfileInformation } from "@/types/profile";
+import { useState } from "react";
+import { UserDetails } from "@/types/user-details";
 import {Img} from "react-image";
 import { LuPencil } from "react-icons/lu";
 import { ChangeAvatar } from "@/components/ChangeAvatar";
 import { Input } from "@/components/ui/input";
 
-export default function ProfileUser(user : ProfileInformation) {
+export default function ProfileUser(userDetails : UserDetails) {
     const [showChangeAvatar, setShowChangeAvatar] = useState(false);
     const [isEditingName, setEditingName] = useState(false);
-    const [nameInput, setNameInput] = useState(user.display_name);
+    const [nameInput, setNameInput] = useState(userDetails.displayName);
 
     const hanldeChangeName = () => {
         setEditingName(false); 
@@ -18,7 +18,7 @@ export default function ProfileUser(user : ProfileInformation) {
         <div className="text-white p-6 rounded-2xl w-full max-w-sm space-y-4 shadow-lg bg-[#161616]">
             <div className="relative">
                 <Img 
-                    src={user.avatar_url} 
+                    src={userDetails.avatarUrl} 
                     alt="avatar" 
                     className="rounded-md object-cover w-full h-48" 
                     loader={<div className="text-gray-500 p-4">Loading...</div>}
@@ -33,10 +33,10 @@ export default function ProfileUser(user : ProfileInformation) {
             </div>
 
             {showChangeAvatar && (
-                <ChangeAvatar user={user} onClose={() => setShowChangeAvatar(false)} />
+                <ChangeAvatar userDetails={userDetails} onClose={() => setShowChangeAvatar(false)} />
             )}
 
-            <div className="text-md relative text-lg font-bold">
+            <div className="relative text-lg font-bold">
                 {isEditingName ? (
                     <Input
                         autoFocus
@@ -59,7 +59,7 @@ export default function ProfileUser(user : ProfileInformation) {
             </div>
 
             <p className="text-md text-gray-400">
-                Created since {new Date(user.created_date).toLocaleDateString("en-US", {
+                Created since {new Date(userDetails.createdDate).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -70,7 +70,7 @@ export default function ProfileUser(user : ProfileInformation) {
                 <div className="flex justify-between"> 
                     {/* flex justify-between: cho len 1 hang xong can 2 phan tu ra 2 ben (between la khoang trong) */}
                     <p>List</p>
-                    <p>{user.movies_in_list}</p>
+                    <p>{userDetails.moviesInList}</p>
                 </div>
             </div>
 
@@ -79,7 +79,7 @@ export default function ProfileUser(user : ProfileInformation) {
             <div className="text-md pr-3 text-white">
                 <div className="flex justify-between">
                     <p>Watched</p>
-                    <p>{user.movies_watched}</p>
+                    <p>{userDetails.moviesWatched}</p>
                 </div>
             </div>
         </div>

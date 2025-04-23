@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { RegisterFormValues } from "../types/register"
+import { UserDetails } from "../types/user-details"
 
 export default function SignUpForm() {
     const {
@@ -11,10 +11,10 @@ export default function SignUpForm() {
         handleSubmit, 
         watch, // Dung cho confirm password
         formState: { errors }
-    } = useForm<RegisterFormValues>()
+    } = useForm<UserDetails>()
 
 
-    const onSubmit = async (data: RegisterFormValues) => {
+    const onSubmit = async (data: UserDetails) => {
         try {
             const response = await fetch("http://localhost:8000/api/register", {
                 method: "POST",
@@ -47,9 +47,9 @@ export default function SignUpForm() {
                                     id="first_name"
                                     type="text"
                                     placeholder="Thomas"
-                                    {...register("first_name", { required: true })}
+                                    {...register("firstName", { required: true })}
                                 />
-                                {errors.first_name && (
+                                {errors.firstName && (
                                     <span className="text-sm text-red-500">First name cannot be leave empty</span>
                                 )}
                             </div>
@@ -60,9 +60,9 @@ export default function SignUpForm() {
                                     id="Last_name"
                                     type="text"
                                     placeholder="Shelby"
-                                    {...register("last_name", { required: true })}
+                                    {...register("lastName", { required: true })}
                                 />
-                                {errors.first_name && (
+                                {errors.lastName && (
                                     <span className="text-sm text-red-500">Last name cannot be leave empty</span>
                                 )}
                             </div>
@@ -74,9 +74,9 @@ export default function SignUpForm() {
                                     id="display_name"
                                     type="text"
                                     placeholder="Tommy"
-                                    {...register("display_name", { required: true })}
+                                    {...register("displayName", { required: true })}
                                 />
-                                {errors.display_name && (
+                                {errors.displayName && (
                                     <span className="text-sm text-red-500">Display name cannot be leave empty</span>
                                 )}
                         </div>                   
@@ -86,9 +86,26 @@ export default function SignUpForm() {
                             <Input
                                 id="date_of_birth"
                                 type="date"
-                                {...register("date_of_birth", { required: true })}
+                                {...register("dateOfBirth", { required: true })}
                             />
                         </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="phone_number">Phone Number</Label>
+                            <Input
+                                id="phone_number"
+                                type="text"
+                                placeholder="+84 123 456 789"
+                                {...register("phoneNumber", {
+                                    required: true,
+                                    pattern: {
+                                        value: /^\+\d{1,4}\d{9}$/,
+                                        message: "Phone number must be in the format +(country code)XXXXXXXXX"
+                                    }
+                                })}
+                            />
+                        </div>
+
 
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>

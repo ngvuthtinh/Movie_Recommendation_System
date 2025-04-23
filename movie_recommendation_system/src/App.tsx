@@ -2,22 +2,38 @@ import LoginForm from './components/LoginForm'
 import SignUpForm from './components/SignUpForm'
 import ProfileUser from './components/ProfileUser'
 import './styles/App.css'
+import AccountDetails from './components/AccountDetails'
 
 function App() {
-  // For testing ProfileUser component
-  const user = {
-    avatar_url: 'https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-6/492226301_1195786458881359_720097839082290000_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEnbdjenKPDWB_d7VwiAEJKVZ8Pbpor2YhVnw9umivZiKC1C-jbEgYTycgV542CNVtbekXPOJ0ekcTbYhF4KgQ6&_nc_ohc=3zKPv3ZYUpMQ7kNvwEts-ir&_nc_oc=Adm_vPRVB45zWdHjhF8k28-M85BRvOif31zyvE0EDXyhX6xkve2SeZeTFCifePWKkQc&_nc_zt=23&_nc_ht=scontent.fsgn5-9.fna&_nc_gid=O0d7AL2AxpYgK9cX7nDVrA&oh=00_AfEuKaXNABamozsOTSm_hTCdo4Usqs-ndFiK2vVMV2hmjw&oe=680D9A33',
-    display_name: 'Kawaikute Gomen',
-    created_date: '2023-01-01',
-    movies_in_list: 5,
-    movies_watched: 10,
+
+  // For testing AccountDetails component
+  const userDetails = {
+    email: "shelby@gmail.com",
+    password: "dua50diroitaonoicho",
+    confirmPassword: "cho50diroitaonoicho",
+    displayName: "Tommy",
+    dateOfBirth: "25/05/1890",
+    firstName: "Thomas",
+    lastName: "Shelby",
+    phoneNumber: "+84 838 198 653",
+    avatarUrl: 'https://i.tribune.com.pk/media/images/tommy-shelby-cillian-murphy-peaky-blinders-15692341717571152-0/tommy-shelby-cillian-murphy-peaky-blinders-15692341717571152-0.jpg',
+    createdDate: '2023-01-01',
+    moviesInList: 5,
+    moviesWatched: 10,
+    moviesWatchedList: ['movie1', 'movie2', 'movie3'],
+    moviesInListList: ['movie4', 'movie5'],
+    moviesInListWatched: ['movie6', 'movie7']
   }
 
   return (
     <>
       <LoginForm/>
       <SignUpForm/>
-      <ProfileUser {...user} />
+      <div className='flex justify-between p-40'>
+        <ProfileUser {...userDetails} />
+        <AccountDetails {...userDetails} />
+      </div>
+      
     </>
   )
 }

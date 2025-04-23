@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { ChangeAvatarProps } from "@/types/avatar_props";
+import { useState, useEffect } from "react";
+import { ChangeAvatarProps } from "@/types/avatar-props";
 import { Button } from "@/components/ui/button"
 import { Img } from "react-image";
 
-export function ChangeAvatar ({ user, onClose }: ChangeAvatarProps) {
+export function ChangeAvatar ({ userDetails, onClose }: ChangeAvatarProps) {
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ export function ChangeAvatar ({ user, onClose }: ChangeAvatarProps) {
             <div className={`pt-4 rounded-md bg-[#161616] shadow-md w-full max-w-sm transition-all duration-200 ${animate ? "scale-100" : "scale-90"}`}>
                 <div className="flex justify-center mb-4">
                     <Img
-                        src={user.avatar_url}
+                        src={userDetails.avatarUrl}
                         alt="avatar"
                         className="rounded-full object-cover h-20 w-20"
                         loader={<div className="text-gray-500 p-4">Loading...</div>}

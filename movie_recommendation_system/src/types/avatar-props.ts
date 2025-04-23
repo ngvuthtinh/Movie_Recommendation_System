@@ -1,7 +1,7 @@
-import { ProfileInformation } from "./profile";
+import { UserDetails } from "./user-details";
 
 export interface ChangeAvatarProps {
-    user: ProfileInformation
+    userDetails: UserDetails
     onAvatarChange?: (newAvatar: string) => void;
     onAvatarRemove?: () => void;
     onClose: () => void;
