@@ -1,15 +1,15 @@
-import { I_MovieList1 } from '../types/I_MovieList1.ts';
+import { IMovieList1 } from '../types/i_movie_list_1.ts';
 import { SiNetflix } from "react-icons/si";
 import { IoMdEye } from "react-icons/io";
 import { FaHeart, FaStar } from "react-icons/fa";
 
-export default function MovieList_1() {
-    const url = 'https://image.tmdb.org/t/p/original';
+export default function MovieList1() {
+    const URL = 'https://image.tmdb.org/t/p/original';
     // Function to get the color based on the match percentage
     const getMatchColor = (match: number): string => {
         if (match >= 80) return "text-green-400"; // Excellent match
         if (match >= 50) return "text-yellow-400"; // Average match
-        if (match >= 30) return "text-orange-400"; // Below average
+        if (match >= 30) return "text-orange-400"; // Low
         return "text-red-500"; // Poor match
     };
 
@@ -24,8 +24,7 @@ export default function MovieList_1() {
         return isBoolean ? "text-red-500" : "text-gray-500"; // Change color based on watched status
     };
 
-
-    const posters: I_MovieList1[] = [
+    const posters: IMovieList1[] = [
         {
             id: 27205,
             title: 'Inception',
@@ -80,7 +79,7 @@ export default function MovieList_1() {
         release_date: poster.release_date.substring(0, 4),
         vote_average: poster.vote_average.toFixed(1),
         runtime: `${Math.floor(poster.runtime / 60)}h ${poster.runtime % 60}m`,
-        poster_path: `${url}${poster.poster_path}`,
+        poster_path: `${URL}${poster.poster_path}`,
     }));
     return (
         <div

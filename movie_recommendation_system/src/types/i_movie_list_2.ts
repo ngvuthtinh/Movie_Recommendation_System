@@ -1,4 +1,4 @@
-export interface I_MovieList2 {
+export interface IMovieList2 {
     id: number;
     title: string;
     description: string;

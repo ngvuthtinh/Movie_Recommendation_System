@@ -1,12 +1,12 @@
 import './App.css'
-import MovieList_2 from './components/MovieList_2.tsx'
-import MovieList_1 from "./components/MovieList_1.tsx";
+import MovieList2 from "./components/movie_list_2.tsx";
+import MovieList1 from "./components/movie_list_1.tsx";
 
 function App() {
   return (
     <>
-        <MovieList_2 />
-        <MovieList_1 />
+        <MovieList2 />
+        <MovieList1 />
     </>
   )
 }

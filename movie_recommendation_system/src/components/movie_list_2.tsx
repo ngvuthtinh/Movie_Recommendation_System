@@ -1,8 +1,8 @@
-import { I_MovieList2 } from '../types/I_MovieList2.ts';
+import {IMovieList2 } from '../types/i_movie_list_2.ts';
 
-export default function MovieList_2() {
-    const url = 'https://image.tmdb.org/t/p/original';
-    const posters: I_MovieList2[] = [
+export default function MovieList2() {
+    const URL = 'https://image.tmdb.org/t/p/original';
+    const posters: IMovieList2[] = [
         {
             id: 27205,
             title: 'Inception',
@@ -37,7 +37,7 @@ export default function MovieList_2() {
 
     const postersProcess = posters.map((poster) => ({
         ...poster,
-        poster_path: `${url}${poster.poster_path}`,
+        poster_path: `${URL}${poster.poster_path}`,
     }));
 
     return (
