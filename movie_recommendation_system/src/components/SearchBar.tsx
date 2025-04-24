@@ -1,5 +1,3 @@
-"use client"
-
 import { Search, ChevronDown, ChevronUp } from "lucide-react"
 import { type SearchBarProps, defaultSearchBarProps } from "../types/I_SearchBar"
 
