@@ -96,13 +96,7 @@ export default function SignUpForm() {
                                 id="phone_number"
                                 type="text"
                                 placeholder="+84 123 456 789"
-                                {...register("phoneNumber", {
-                                    required: true,
-                                    pattern: {
-                                        value: /^\+\d{1,4}\d{9}$/,
-                                        message: "Phone number must be in the format +(country code)XXXXXXXXX"
-                                    }
-                                })}
+                                {...register("phoneNumber", {required: true})}
                             />
                         </div>
 
