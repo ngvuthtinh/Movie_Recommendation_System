@@ -9,7 +9,7 @@ export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded overflow-hidden">
+    <div className="max-w-lg mx-auto bg-white rounded overflow-hidden">
       {/* Main content area */}
       <div className="bg-slate-600 p-6 text-white">
         {/* Movie title */}
