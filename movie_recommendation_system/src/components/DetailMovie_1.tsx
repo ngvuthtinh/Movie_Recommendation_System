@@ -1,6 +1,6 @@
 import { Play, BookmarkPlus, ThumbsUp } from "lucide-react";
 import { MovieDetailProps, defaultMovieProps } from '../types/I_DetailMovie1';
-
+import { SiNetflix } from "react-icons/si";
 export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
   // Merge provided props with default props
   const { id, title, rating, year, duration, matchPercentage, description, genres } = {
@@ -17,7 +17,7 @@ export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
 
         {/* Movie metadata row */}
         <div className="flex items-center gap-2 mb-4 text-sm">
-          <span className="text-red-600 font-bold">N</span>
+          <SiNetflix className="text-red-600" size={20} />
           <span>{rating}</span>
           <span className="mx-1">·</span>
           <span>{year}</span>
