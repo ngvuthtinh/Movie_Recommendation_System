@@ -16,7 +16,7 @@ export interface SearchBarProps {
     searchQuery: "",
     selectedGenre: "",
     selectedYear: "",
-    isAdultContentEnabled: true,
+    isAdultContentEnabled: false,
     onSearchQueryChange: () => {},
     onGenreChange: () => {},
     onYearChange: () => {},
