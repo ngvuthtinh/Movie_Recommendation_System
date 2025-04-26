@@ -4,6 +4,7 @@ import {Img} from "react-image";
 import { LuPencil } from "react-icons/lu";
 import { ChangeAvatar } from "@/components/ChangeAvatar";
 import { Input } from "@/components/ui/input";
+import { Button } from "./ui/button";
 
 export default function ProfileUser(userDetails : UserDetails) {
     const [showChangeAvatar, setShowChangeAvatar] = useState(false);
@@ -13,7 +14,33 @@ export default function ProfileUser(userDetails : UserDetails) {
     const hanldeChangeName = () => {
         setEditingName(false); 
     }
+
+    // TODO: handleChangeAvatar = () => {}
+
+    const handleChangePassword = () => {
+    //     // Gợi ý: mở một modal hoặc điều hướng đến trang đổi mật khẩu
+    //     window.location.href = "/change-password"
+    }
     
+    const handleSignOut = async () => {
+    //     try {
+    //         // Nếu backend yêu cầu logout API
+    //         await fetch("http://localhost:8000/api/logout", {
+    //             method: "POST",
+    //             credentials: "include", // nếu bạn dùng cookie để lưu session
+    //         })
+    
+    //         // Xóa localStorage nếu bạn lưu token ở đó
+    //         localStorage.removeItem("access_token")
+    
+    //         // Chuyển hướng về trang login
+    //         window.location.href = "/login"
+    //     } catch (error) {
+    //         console.error("Sign out failed", error)
+    //     }
+    }
+    
+
     return (
         <div className="text-white p-6 rounded-2xl w-full max-w-sm space-y-4 shadow-lg bg-[#161616]">
             <div className="relative">
@@ -82,7 +109,22 @@ export default function ProfileUser(userDetails : UserDetails) {
                     <p>{userDetails.moviesWatched}</p>
                 </div>
             </div>
-        </div>
 
+            <div className="flex justify-between">
+                <Button
+                    className="w-1/3 bg-red-500 rounded-lg text-white hover:bg-red-900"
+                    onClick={handleSignOut}
+                >   
+                    Sign Out
+                </Button>
+
+                <Button
+                    className="w-3/5 bg-[#1d1f37] rounded-lg text-white hover:bg-[#292d5a]"
+                    onClick={handleChangePassword}
+                >
+                    Change Password
+                </Button>
+            </div>
+        </div>
     ) 
 }
