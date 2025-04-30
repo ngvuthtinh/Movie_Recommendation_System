@@ -11,4 +11,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  optimizeDeps: {
+    exclude: [
+      'react-icons/si',
+      'react-icons/fi',
+      'react-icons/gr', 
+      'react-icons/bs',
+      'react-icons/io',
+      'react-icons/fa',
+      'lucide-react'
+    ]
+  }
 })
