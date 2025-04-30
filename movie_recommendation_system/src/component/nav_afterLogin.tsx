@@ -2,7 +2,11 @@ import React from 'react'
 import { SiNetflix } from "react-icons/si";
 import { FiBell, FiSearch } from 'react-icons/fi';
 
-const NavAfterLogin : React.FC = () => {
+interface NavAfterLoginProps {
+    // Add props here if needed in the future
+  }
+
+const NavAfterLogin : React.FC = (props: NavAfterLoginProps) => {
     return(
         <nav className="bg-black text-white flex justify-between items-center px-6 py-4">
             {/*Logo and navigation button*/}

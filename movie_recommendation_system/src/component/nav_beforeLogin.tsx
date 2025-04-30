@@ -1,6 +1,11 @@
 import React from 'react'
 
-const NavBeforeLogin : React.FC = () => {
+
+interface NavBeforeLoginProps {
+    // Add props here if needed in the future
+  }
+
+const NavBeforeLogin : React.FC = (props: NavBeforeLoginProps) => {
     return(
        <nav className='bg-black text-white flex justify-between items-center px-6 py-4'>
             <img
