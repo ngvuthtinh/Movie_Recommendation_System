@@ -1,26 +1,32 @@
 import React from 'react'
 import { SiNetflix } from "react-icons/si";
 import { FiBell, FiSearch } from 'react-icons/fi';
+import { Button } from "@/components/ui/button";
 
-interface NavAfterLoginProps {
-    // Add props here if needed in the future
-  }
+const NavAfterLogin : React.FC = () => {
+    // Handle draw rectangle
 
-const NavAfterLogin : React.FC = (props: NavAfterLoginProps) => {
     return(
-        <nav className="bg-black text-white flex justify-between items-center px-6 py-4">
-            {/*Logo and navigation button*/}
-            <button className="flex gap-6 items-center">
-                <button className='text-3xl text-red-600 font-bold'>
-                    <SiNetflix/>
-                </button>
-                <button className='bg-red-600 px-3 py-1 rounded hover:bg-red-600'>
+        <nav className="bg-black text-white flex justify-between items-center">
+            {/* Logo and navigation button */}
+            <div className="flex gap-4 items-center m-4">
+                <SiNetflix className="text-red-600 size-8" />
+
+                <Button className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg">
                     Home
-                </button>
-                <button>My List</button>
-                <button>Browse Movies</button>
-            </button>
-            {/*Search bar, Icons and Avatar*/}
+                </Button>
+
+                <Button className="bg-transparent">
+                    My List
+                </Button>
+
+                <Button className="bg-transparent">
+                    Browse Movies
+                </Button>
+            </div>
+
+
+            {/* Search bar, Icons and Avatar */}
             <button className='flex items-center gap-4'>
             <div className="relative">
                     <input
