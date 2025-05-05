@@ -57,7 +57,7 @@ export default function SignUpForm() {
                             <div className="flex flex-col space-y-2">
                                 <Label htmlFor="last_name">Last Name</Label>
                                 <Input
-                                    id="Last_name"
+                                    id="last_name"
                                     type="text"
                                     placeholder="Shelby"
                                     {...register("lastName", { required: true })}
@@ -107,6 +107,7 @@ export default function SignUpForm() {
                                 id="email"
                                 type="email"
                                 placeholder="tommy1890@gmail.com"
+                                {...register("email", {required: true})}
                             />
                         </div>
 
