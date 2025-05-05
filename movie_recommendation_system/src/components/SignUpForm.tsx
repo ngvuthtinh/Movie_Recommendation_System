@@ -33,7 +33,7 @@ export default function SignUpForm() {
     const password = watch("password") // Confirm password
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="flex items-center justify-center">
             <Card className="w-full max-w-md p6 rounded-2xl shadow-md">
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
