@@ -4,7 +4,7 @@ import { GrInstagram } from "react-icons/gr";
 import { BsTwitterX } from "react-icons/bs";
 import { LuYoutube } from "react-icons/lu";
 
-const Footer: React.FC = (props: FooterProps) => {
+const Footer: React.FC = () => {
     return (
       <footer className="bg-black text-white px-6 py-10 text-sm">
         <div className="flex gap-5 mt-3 text-xl mb-3 ml-8 mr-8">
