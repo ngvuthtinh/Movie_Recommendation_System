@@ -42,7 +42,7 @@ export default function ProfileUser(userDetails : UserDetails) {
     
 
     return (
-        <div className="text-white p-6 rounded-2xl w-full max-w-sm space-y-4 shadow-lg bg-[#161616]">
+        <div className="text-white p-6 rounded-2xl w-full max-w-sm space-y-3 shadow-lg bg-[#161616]">
             <div className="relative">
                 <Img 
                     src={userDetails.avatarUrl} 
