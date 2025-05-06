@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 export default function Landing() {
     const navigate = useNavigate()
-    const [bgImage, setBgImage] = useState(2)
+    const [bgImage, setBgImage] = useState(1)
 
     const handleGetStarted = () => {
         navigate("/register")
@@ -32,7 +32,7 @@ export default function Landing() {
                 backgroundImage: `url(/src/assets/backgrounds/land-page-bg${bgImage}.jpg)`
             }}
         >
-            <div className="relative flex items-center justify-center mt-[68px] mb-[264px]">
+            <div className="relative flex items-center justify-center">
                 <div className="w-full max-w-xl rounded-lg p-6 space-y-4 shadow-lg bg-black/70 backdrop-invert backdrop-opacity-20 text-center text-white flex flex-col items-center justify-center">
                     <h1 className="text-4xl font-bold">Never Lose Your Favorite Contents Again</h1>
                     <p className="text-sm">Ready to Watch? Create Your Account Now</p>
@@ -47,7 +47,7 @@ export default function Landing() {
 
         </div>
 
-        <div className="fixed z-1 w-full bottom-0">
+        <div className="w-full bottom-0">
             <Footer />
         </div>
         </>
