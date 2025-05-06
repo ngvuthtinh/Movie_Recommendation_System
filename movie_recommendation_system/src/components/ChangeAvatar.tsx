@@ -11,7 +11,7 @@ export function ChangeAvatar ({ userDetails, onClose }: ChangeAvatarProps) {
     }, [])
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-200 ${animate ? "opacity-100" : "opacity-0"}`}>
+        <div className={`h-screen fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-200 ${animate ? "opacity-100" : "opacity-0"}`}>
             {/* 
                 fixed inset-0 z-50: modal sẽ chiếm toàn bộ màn hình và nổi lên trên cùng.
                 bg-black/60 backdrop-blur-sm: tạo hiệu ứng mờ nền như Instagram.
