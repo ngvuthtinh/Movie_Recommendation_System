@@ -4,10 +4,6 @@ import { GrInstagram } from "react-icons/gr";
 import { BsTwitterX } from "react-icons/bs";
 import { LuYoutube } from "react-icons/lu";
 
-interface FooterProps {
-  // Add props here if needed in the future
-}
-
 const Footer: React.FC = (props: FooterProps) => {
     return (
       <footer className="bg-black text-white px-6 py-10 text-sm">

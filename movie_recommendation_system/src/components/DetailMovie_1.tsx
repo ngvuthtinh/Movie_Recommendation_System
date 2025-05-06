@@ -9,12 +9,11 @@ export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white rounded overflow-hidden">
+    <div className="max-w-lg mx-auto rounded overflow-hidden">
       {/* Main content area */}
-      <div className="bg-slate-600 p-6 text-white">
+      <div className="bg-transparent p-6 text-white">
         {/* Movie title */}
         <h1 className="text-4xl font-bold mb-3">{title}</h1>
-
         {/* Movie metadata row */}
         <div className="flex items-center gap-2 mb-4 text-sm">
           <SiNetflix className="text-red-600" size={20} />
