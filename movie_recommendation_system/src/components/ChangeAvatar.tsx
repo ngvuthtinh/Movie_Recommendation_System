@@ -44,7 +44,7 @@ export function ChangeAvatar ({ userDetails, onClose }: ChangeAvatarProps) {
                         className="text-white px-4 w-full h-12 hover:bg-zinc-700 transition duration-200 rounded-t-none"
                         onClick={onClose}
                     >
-                        Cancle
+                        Cancel
                     </Button>
                 </div>
             </div>
