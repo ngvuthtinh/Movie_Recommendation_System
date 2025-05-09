@@ -30,8 +30,8 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full max-w-[500px] p-10 bg-black/70 rounded-xl shadow-lg">
-      <Card className="w-full max-w-md p-6 rounded-2xl shadow-md">
+    <div className="flex items-center justify-center w-full max-w-[500px] p-9 bg-black/70 rounded-xl shadow-lg">
+      <Card className="w-full max-w-md p-4 rounded-2xl shadow-md">
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <h1 className="text-2xl font-bold text-center text-black">Login</h1>
