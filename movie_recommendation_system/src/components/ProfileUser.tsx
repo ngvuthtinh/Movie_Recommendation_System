@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserDetails } from "@/types/user-details";
+import { UserDetails } from "@/types/UserDetails";
 import {Img} from "react-image";
 import { LuPencil } from "react-icons/lu";
 import { ChangeAvatar } from "@/components/ChangeAvatar";

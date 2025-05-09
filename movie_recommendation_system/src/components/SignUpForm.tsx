@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { UserDetails } from "../types/user-details"
+import { UserDetails } from "../types/UserDetails"
 
 export default function SignUpForm() {
     const {
@@ -34,7 +34,7 @@ export default function SignUpForm() {
 
     return (
         <div className="flex items-center justify-center">
-            <Card className="w-full max-w-md p6 rounded-2xl shadow-md">
+            <Card className="w-full max-w-md rounded-2xl shadow-md">
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <h1 className="text-2xl font-bold text-black">Sign Up</h1>
@@ -68,7 +68,7 @@ export default function SignUpForm() {
                             </div>
                         </div>
 
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                                 <Label htmlFor="display_name">Display Name</Label>
                                 <Input
                                     id="display_name"
@@ -80,7 +80,7 @@ export default function SignUpForm() {
                                     <span className="text-sm text-red-500">Display name cannot be leave empty</span>
                                 )}
                         </div>                   
-                        
+                         */}
                         <div className="space-y-2">
                             <Label htmlFor="date_of_birth">Date of Birth</Label>
                             <Input

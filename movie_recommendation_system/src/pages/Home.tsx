@@ -1,15 +1,13 @@
-import NavAfterLogin from "@/components/nav_afterLogin";
-import DetailMovie_1 from "@/components/DetailMovie_1";
-import MovieList1 from "@/components/movie_list_1"
-import Footer from "@/components/footer"
-import { defaultMovieProps } from '@/types/I_DetailMovie1';
+import NavAfterLogin from "@/components/NavAfterLogin";
+import DetailMovie_1 from "@/components/DetailMovie1";
+import MovieList1 from "@/components/MovieList1"
+import Footer from "@/components/Footer"
+import { defaultMovieProps } from '@/types/DetailMovie1';
 
 export default function HomePage() {
     return (
         <div className="bg-black">
-            <div className="fixed w-full top-0 z-50 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
-                <NavAfterLogin />
-            </div>
+            <NavAfterLogin/>
 
             <div className="bg-[url(https://image.tmdb.org/t/p/original/pbrkL804c8yAv3zBZR4QPEafpAR.jpg)]
                             w-full h-[48rem] bg-cover bg-center relative">

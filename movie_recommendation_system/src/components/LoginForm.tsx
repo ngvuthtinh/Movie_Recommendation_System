@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { LoginFormValues } from "../types/auth"
+import { LoginFormValues } from "../types/Auth"
 
 export default function LoginForm() {
   const {
@@ -30,7 +30,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex items-center justify-center px-4">
+    <div className="flex items-center justify-center w-full max-w-[500px] p-10 bg-black/70 rounded-xl shadow-lg">
       <Card className="w-full max-w-md p-6 rounded-2xl shadow-md">
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

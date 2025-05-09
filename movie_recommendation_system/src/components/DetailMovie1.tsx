@@ -1,5 +1,5 @@
 import { Play, BookmarkPlus, ThumbsUp } from "lucide-react";
-import { MovieDetailProps, defaultMovieProps } from '../types/I_DetailMovie1';
+import { MovieDetailProps, defaultMovieProps } from '../types/DetailMovie1';
 import { SiNetflix } from "react-icons/si";
 export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
   // Merge provided props with default props

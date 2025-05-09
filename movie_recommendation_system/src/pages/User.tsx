@@ -1,6 +1,6 @@
 import AccountDetails from "@/components/AccountDetails"
-import Footer from "@/components/footer"
-import NavAfterLogin from "@/components/nav_afterLogin"
+import Footer from "@/components/Footer"
+import NavAfterLogin from "@/components/NavAfterLogin"
 import ProfileUser from "@/components/ProfileUser"
 
 export default function User() {
@@ -24,9 +24,7 @@ export default function User() {
 
     return (
         <div className="bg-black min-h-screen">
-            <div className="fixed z-1 w-full top-0">
-                <NavAfterLogin/>
-            </div>
+            <NavAfterLogin/>
 
             <div className="text-white/70 px-40 pb-10 pt-20 items-center space-y-1">
                 <h1 className="font-bold text-4xl">

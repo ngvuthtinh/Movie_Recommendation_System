@@ -1,4 +1,4 @@
-import { UserDetails } from "@/types/user-details";
+import { UserDetails } from "@/types/UserDetails";
 
 
 export default function AccountDetails(userDetails: UserDetails) {

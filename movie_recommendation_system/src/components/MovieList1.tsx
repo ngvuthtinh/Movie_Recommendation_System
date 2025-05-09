@@ -1,4 +1,4 @@
-import { IMovieList1 } from '../types/i_movie_list_1.ts';
+import { IMovieList1 } from '../types/MovieList1.ts';
 import { SiNetflix } from "react-icons/si";
 import { IoMdEye } from "react-icons/io";
 import { FaHeart, FaStar } from "react-icons/fa";

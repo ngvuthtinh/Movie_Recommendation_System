@@ -1,4 +1,4 @@
-import {IMovieList2 } from '../types/i_movie_list_2.ts';
+import {IMovieList2 } from '../types/MovieList2.ts';
 
 export default function MovieList2() {
     const URL = 'https://image.tmdb.org/t/p/original';

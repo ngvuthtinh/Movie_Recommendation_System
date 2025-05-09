@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChangeAvatarProps } from "@/types/avatar-props";
+import { ChangeAvatarProps } from "@/types/AvatarProps";
 import { Button } from "@/components/ui/button"
 import { Img } from "react-image";
 

@@ -1,4 +1,4 @@
-import { UserDetails } from "./user-details";
+import { UserDetails } from "./UserDetails";
 
 export interface ChangeAvatarProps {
     userDetails: UserDetails
