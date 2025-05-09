@@ -11,7 +11,7 @@ export interface MovieDetail2Props {
     productionCompanies?: string[]
     languages?: string[]
     keywords?: string[]
-  }
+}
   
   // Default values for the movie props
   export const defaultMovieProps: Required<MovieDetail2Props> = {

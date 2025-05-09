@@ -14,7 +14,7 @@ import {
 
 const NavAfterLogin: React.FC = () => {
     return (
-        <nav className="bg-black flex justify-between items-center">
+        <nav className="bg-black/60 flex justify-between items-center p-4">
             {/* Logo and navigation button */}
             <div className="flex gap-4 items-center mr-4 ml-4">
                 <SiNetflix className="text-red-600 size-9" />
