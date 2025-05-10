@@ -7,9 +7,7 @@ export default function SignUp() {
             <NavBeforeLogin />
     
             <div className="h-screen bg-[url(/src/assets/backgrounds/SignUpBg.jpg)] bg-cover bg-center relative flex items-center justify-center pt-25 pb-10">
-                <div className="w-full max-w-[500px] p-9 bg-black/70 rounded-xl shadow-lg">
-                    <SignupForm />
-                </div>
+                <SignupForm />
             </div>
         </div>
     )

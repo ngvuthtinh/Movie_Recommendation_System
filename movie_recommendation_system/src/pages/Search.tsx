@@ -6,8 +6,8 @@ export default function SearchPage() {
     return (
         <div className="bg-black min-h-screen text-white">
             <NavAfterLogin />
-            <div className="bg-black min-h-screen pt-[68px]">
-                <div className=" z-5 w-full ">
+            <div className="bg-black min-h-screen pt-[4.25rem]">
+                <div className="z-5 w-full">
                     <SearchBar />
                 </div>
                 
