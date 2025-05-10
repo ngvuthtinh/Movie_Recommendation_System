@@ -2,30 +2,38 @@ import AccountDetails from "@/components/AccountDetails"
 import Footer from "@/components/Footer"
 import NavAfterLogin from "@/components/NavAfterLogin"
 import ProfileUser from "@/components/ProfileUser"
+import { useState } from "react"
 
 export default function User() {
-    const user = {
-        email: "abcd@gmail.com",
-        password: "123456",
-        confirmPassword: "123456",
-        displayName: "Ha Anh Tuan",
-        dateOfBirth: "2000-01-01",
+    const [userDetails, setUserDetails] = useState({
         firstName: "Anh Tuan",
-        lastName: "Ha",
+        lastName: "Ha", 
+        displayName: "Ha Anh Tuan",
+        email: "hatuan@gmail.com",
+        dateOfBirth: "2000-01-01",
         phoneNumber: "123456789",
+        password: "123456",
+    });
+
+    const userProfile = {
         avatarUrl: "https://cdn2.tuoitre.vn/471584752817336320/2025/3/10/3-1741601671995302840220.jpg",
-        createdDate: "2023-10-01",
+        displayName: userDetails.displayName,
+        createdDate: "2023-10-01", 
         moviesInList: 2,
         moviesWatched: 23,
-        moviesWatchedList: ["movie1", "movie2"],
-        moviesInListList: ["movie3", "movie4"],
-        moviesInListWatched: ["movie5", "movie6"],
+    }
+
+    const handleDisplayNameChange = (newDisplayName: string) => {
+        setUserDetails(prev => ({
+            ...prev,
+            displayName: newDisplayName
+        }));
     }
 
     return (
         <div className="bg-black min-h-screen">
             <NavAfterLogin/>
-
+            
             <div className="text-white/70 px-40 pb-10 pt-20 items-center space-y-1">
                 <h1 className="font-bold text-4xl">
                     Your Account
@@ -35,10 +43,10 @@ export default function User() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 px-10 md:px-40 pb-10">
                 <div className="flex justify-center lg:justify-start col-span-1">
-                    <ProfileUser {...user} />
+                    <ProfileUser {...userProfile} onDisplayNameChange={handleDisplayNameChange} />
                 </div>
                 <div className="flex justify-center lg:justify-end col-span-2">
-                    <AccountDetails {...user}/>
+                    <AccountDetails {...userDetails}/>
                 </div>
             </div>
 

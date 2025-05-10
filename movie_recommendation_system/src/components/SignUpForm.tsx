@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { UserDetails } from "../types/UserDetails"
+import { RegisterFormValues } from "../types/Auth"
 
 export default function SignUpForm() {
     const {
@@ -11,10 +11,10 @@ export default function SignUpForm() {
         handleSubmit, 
         watch, // Dung cho confirm password
         formState: { errors }
-    } = useForm<UserDetails>()
+    } = useForm<RegisterFormValues>()
 
 
-    const onSubmit = async (data: UserDetails) => {
+    const onSubmit = async (data: RegisterFormValues) => {
         try {
             const response = await fetch("http://localhost:8000/api/register", {
                 method: "POST",
