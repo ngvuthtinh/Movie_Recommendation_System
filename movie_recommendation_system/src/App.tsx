@@ -1,12 +1,10 @@
-import Footer from './components/footer'
-import MyMovieList from './components/MyMovieList'
-import NavAfterLogin from './components/nav_afterLogin'
+import FilmPage from './components/FilmPage'
 import './styles/App.css'
 
 function App() {
   return (
     <>
-      <MyMovieList/>
+      <FilmPage/>
     </>
   )
 }
