@@ -50,7 +50,7 @@ export default function ChatFrame() {
 
                 <div className="mt-3 border-1 border-gray-700 rounded-lg flex-1 overflow-auto">
                     {messages.map(({user, time, text }) => (
-                        <div className="mb-4">
+                        <div className="mx-4 my-2">
                             <div className="flex justify-between text-sm text-gray-600">
                                 <span>{user}</span>
                                 <span>{time}</span>
@@ -60,21 +60,20 @@ export default function ChatFrame() {
                     ))}
                 </div>
 
-                <div className="mt-3 flex items-center">
+                <div className="relative w-full mt-3">
                     <Input
                         type="text"
                         placeholder="Send your message"
-                        className="rounded-full w-full p-2 text-black [&::placeholder]:pl-1"
+                        className="rounded-full w-full pr-10 pl-4 text-black [&::placeholder]:pl-1"
                         value={inputValue}
                         onChange={e => setInputValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                     />
                     <GoPaperAirplane
-                        className="ml-2 font-black text-black
-                            size-6 cursor-pointer hover:text-blue-600
-                            hover:scale-125 transition-all duration-300"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black
+                                   size-6 cursor-pointer hover:text-blue-600
+                                   hover:scale-125 transition-all duration-300"
                         onClick={handleSend}
-
                     />
                 </div>
 
