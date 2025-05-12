@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Message } from "@/types/Messages";
 
 import { RxCross2 } from "react-icons/rx";
 import { Switch } from "@/components/ui/switch";
@@ -9,7 +10,22 @@ import { GoPaperAirplane } from "react-icons/go";
 
 export default function ChatFrame() {
     const [isChatMode, setIsChatMode] = useState(true);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [inputValue, setInputValue] = useState("");
 
+    const handleSend = () => {
+        if (!inputValue.trim()) return;
+        const newMsg: Message = {
+            user: "You",
+            time: new Date().toLocaleTimeString(),
+            text: inputValue.trim(),
+        };
+        setMessages(prev => [...prev, newMsg]);
+        setInputValue("");
+    };
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") handleSend();
+    };
     return (
         <div className="bg-white border-1 border-black rounded-lg
                         w-[21.25vw] h-[89.5vh] flex flex-col m-4">
@@ -33,17 +49,33 @@ export default function ChatFrame() {
                 </div>
 
                 <div className="mt-3 border-1 border-gray-700 rounded-lg flex-1 overflow-auto">
-
+                    {messages.map(({user, time, text }) => (
+                        <div className="mb-4">
+                            <div className="flex justify-between text-sm text-gray-600">
+                                <span>{user}</span>
+                                <span>{time}</span>
+                            </div>
+                            <div className="text-black">{text}</div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="mt-3 flex items-center">
-                    <Input type="text" placeholder="Send your message"
-                           className="rounded-full w-full p-2 text-black
-                            [&::placeholder]:pl-1"
+                    <Input
+                        type="text"
+                        placeholder="Send your message"
+                        className="rounded-full w-full p-2 text-black [&::placeholder]:pl-1"
+                        value={inputValue}
+                        onChange={e => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
-                    <GoPaperAirplane className="ml-2 font-black text-black
+                    <GoPaperAirplane
+                        className="ml-2 font-black text-black
                             size-6 cursor-pointer hover:text-blue-600
-                            hover:scale-125 transition-all duration-300"/>
+                            hover:scale-125 transition-all duration-300"
+                        onClick={handleSend}
+
+                    />
                 </div>
 
             </div>
