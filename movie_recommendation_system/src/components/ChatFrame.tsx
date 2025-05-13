@@ -28,7 +28,7 @@ export default function ChatFrame() {
     };
     return (
         <div className="bg-white border-1 border-black rounded-lg
-                        w-[21.25vw] h-[89.5vh] flex flex-col m-4">
+                        w-[21.25vw] h-full flex flex-col m-4">
             <div className="m-2 flex flex-col h-full">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-medium text-black">Chat Room</h1>
