@@ -10,7 +10,7 @@ export default function WatchTogetherPage() {
         <>
             <ChatFrame />
             <RoomDetail {...roomInfoDefault} />
-            <Participants {...participantDefault}/>
+            <Participants participants={participantDefault} />
         </>
     );
 }

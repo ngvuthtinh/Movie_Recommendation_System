@@ -1,14 +1,15 @@
 import { Participant } from "@/types/Participants";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input.tsx";
-import { Avatar } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 import { RxCross2 } from "react-icons/rx";
 import { Plus } from "lucide-react";
 import { Search } from "lucide-react";
-import React from "react";
+import { Mic, MicOff} from "lucide-react";
 
-export default function Participants(partcipants: Participant[]) {
+export default function Participants({ participants }: { participants: Participant[] }) {
 
     return (
         <div className="bg-white border-1 border-black rounded-lg
@@ -33,24 +34,45 @@ export default function Participants(partcipants: Participant[]) {
                     </Button>
                 </div>
 
-                <div className="relative w-full">
-                    <Search className="absolute left-3 top-1/2 transform
-                                       translate-y-1/2 text-gray-400" />
+                <div className="flex gap-2">
                     <Input
                         type="text"
                         placeholder="Search..."
-                        className="w-full pl-10 text-black [&::placeholder]:text-gray-400"
+                        className="w-full pl-4 text-black [&::placeholder]:text-gray-400"
                     />
+                    <Button
+                        variant="outline"
+                        className="text-sm font-medium flex items-center
+                                   text-black bg-white hover:bg-black hover:text-white"
+                    >
+                        <Search />
+                    </Button>
                 </div>
 
-                <div className="mt-3 border-1 border-gray-700 rounded-lg flex-1 overflow-auto">
-                    {/*{participants.map(({avatarUrl, name, id, isHost, isMicOn }) => (*/}
-                    {/*    <div className="mx-4 my-2">*/}
-
-                    {/*    </div>*/}
-                    {/*))}*/}
+                <div className="flex justify-between mx-2">
+                    <p className="text-sm font-normal text-gray-500">Participants</p>
+                    <p className="text-sm font-normal text-gray-500">{participants.length}</p>
                 </div>
 
+                <div className="border-1 border-gray-700 rounded-lg ">
+                    {participants.map(({avatarUrl, name, id, isHost, isMicOn }) => (
+                        <div key={id} className="flex items-center justify-between px-4 py-2">
+                            <div className="flex items-center">
+                                <Avatar className="cursor-pointer hover:opacity-80">
+                                    <AvatarImage src={avatarUrl} />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col ml-2">
+                                    <span className="text-sm font-medium text-black">{name}</span>
+                                    <span className="text-xs text-gray-500">{isHost ? "Room Master" : "Participants"}</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-black">
+                                {isMicOn ? ( <Mic /> ) : ( <MicOff /> ) }
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
             </div>
 
