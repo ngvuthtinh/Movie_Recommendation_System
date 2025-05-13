@@ -13,7 +13,7 @@ export default function RoomDetail(roomDetail: RoomInfo) {
     return (
         <div className="bg-white border-1 border-black rounded-lg
                         w-[21.25vw] h-full flex flex-col m-4">
-            <div className="m-2 flex flex-col h-full gap-4">
+            <div className="m-4 flex flex-col h-full gap-4">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-medium text-black">Room Detail</h1>
                     <RxCross2 className="size-8 text-black cursor-pointer

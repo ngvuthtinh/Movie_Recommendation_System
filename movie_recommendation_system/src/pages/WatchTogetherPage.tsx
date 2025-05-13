@@ -17,9 +17,7 @@ import { Info, Users, MessageSquareText } from "lucide-react";
 export default function WatchTogetherPage() {
     const [isMicOn, setIsMicOn] = useState(true);
 
-    const [isRoomDetailOpen, setIsRoomDetailOpen] = useState(false);
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const [isParticipantsOpen, setIsParticipantsOpen] = useState(false);
+    const [activePanel, setActivePanel] = useState<"chat" | "roomDetail" | "participants" | null>(null);
 
     return (
         <div className="bg-black h-screen flex flex-col">
@@ -44,9 +42,9 @@ export default function WatchTogetherPage() {
 
                 {/* Side Panel */}
                 <div className="h-full">
-                    {isChatOpen && <ChatFrame />}
-                    {isRoomDetailOpen && <RoomDetail {...roomInfoDefault} />}
-                    {isParticipantsOpen && <Participants participants={participantDefault} />}
+                    {activePanel === "chat" && <ChatFrame />}
+                    {activePanel === "roomDetail" && <RoomDetail {...roomInfoDefault} />}
+                    {activePanel === "participants" && <Participants participants={participantDefault} />}
                 </div>
             </div>
 
@@ -95,7 +93,7 @@ export default function WatchTogetherPage() {
                 >
                     <Button
                         className="bg-black"
-                        onClick={() => setIsRoomDetailOpen(!isRoomDetailOpen)}
+                        onClick={() => setActivePanel(activePanel === "roomDetail" ? null : "roomDetail")}
                     >
                         <Info
                             className="text-white-600 scale-125"
@@ -103,7 +101,7 @@ export default function WatchTogetherPage() {
                     </Button>
                     <Button
                         className="bg-black"
-                        onClick={() => setIsParticipantsOpen(!isParticipantsOpen)}
+                        onClick={() => setActivePanel(activePanel === "participants" ? null : "participants")}
                     >
                         <Users
                             className="text-white-600 scale-125"
@@ -111,7 +109,7 @@ export default function WatchTogetherPage() {
                     </Button>
                     <Button
                         className="bg-black"
-                        onClick={() => setIsChatOpen(!isChatOpen)}
+                        onClick={() => setActivePanel(activePanel === "chat" ? null : "chat")}
                     >
                         <MessageSquareText
                             className="text-white-600 scale-125"
