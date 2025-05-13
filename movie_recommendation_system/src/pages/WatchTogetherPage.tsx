@@ -42,9 +42,9 @@ export default function WatchTogetherPage() {
 
                 {/* Side Panel */}
                 <div className="h-full">
-                    {activePanel === "chat" && <ChatFrame />}
-                    {activePanel === "roomDetail" && <RoomDetail {...roomInfoDefault} />}
-                    {activePanel === "participants" && <Participants participants={participantDefault} />}
+                    {activePanel === "chat" && <ChatFrame setActivePanel={setActivePanel} />}
+                    {activePanel === "roomDetail" && <RoomDetail roomDetail={roomInfoDefault} setActivePanel={setActivePanel} />}
+                    {activePanel === "participants" && <Participants participants={participantDefault} setActivePanel={setActivePanel}/>}
                 </div>
             </div>
 

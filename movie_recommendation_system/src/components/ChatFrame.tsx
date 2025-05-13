@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 
 import { GoPaperAirplane } from "react-icons/go";
 
-export default function ChatFrame() {
+export default function ChatFrame({setActivePanel}: {setActivePanel: (panel: "chat" | "roomDetail" | "participants" | null) => void}) {
     const [isChatMode, setIsChatMode] = useState(true);
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
@@ -32,8 +32,10 @@ export default function ChatFrame() {
             <div className="m-4 flex flex-col h-full">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-medium text-black">Chat Room</h1>
-                    <RxCross2 className="size-8 text-black cursor-pointer
-                                    hover:text-red-600 hover:scale-125 transition-all duration-300"
+                    <RxCross2
+                        className="size-8 text-black cursor-pointer
+                                   hover:text-red-600 hover:scale-125 transition-all duration-300"
+                        onClick={() => setActivePanel(null)}
                     />
                 </div>
 

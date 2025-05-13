@@ -7,7 +7,13 @@ import { Copy } from "lucide-react"
 import { Eye, EyeOff } from "lucide-react";
 import { RxCross2 } from "react-icons/rx";
 
-export default function RoomDetail(roomDetail: RoomInfo) {
+export default function RoomDetail({
+    roomDetail,
+    setActivePanel,
+}: {
+    roomDetail: RoomInfo;
+    setActivePanel: (panel: "chat" | "roomDetail" | "participants" | null) => void;
+}) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
@@ -16,8 +22,10 @@ export default function RoomDetail(roomDetail: RoomInfo) {
             <div className="m-4 flex flex-col h-full gap-4">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-medium text-black">Room Detail</h1>
-                    <RxCross2 className="size-8 text-black cursor-pointer
-                                    hover:text-red-600 hover:scale-125 transition-all duration-300"
+                    <RxCross2
+                        className="size-8 text-black cursor-pointer
+                                   hover:text-red-600 hover:scale-125 transition-all duration-300"
+                        onClick={() => setActivePanel(null)}
                     />
                 </div>
 

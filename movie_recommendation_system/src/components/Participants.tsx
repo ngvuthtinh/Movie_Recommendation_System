@@ -2,14 +2,20 @@ import { Participant } from "@/types/Participants";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { RxCross2 } from "react-icons/rx";
 import { Plus } from "lucide-react";
 import { Search } from "lucide-react";
 import { Mic, MicOff} from "lucide-react";
 
-export default function Participants({ participants }: { participants: Participant[] }) {
+export default function Participants({
+    participants,
+    setActivePanel
+}: {
+    participants: Participant[];
+    setActivePanel: (panel: "chat" | "roomDetail" | "participants" | null) => void;
+})  {
 
     return (
         <div className="bg-white border-1 border-black rounded-lg
@@ -17,8 +23,10 @@ export default function Participants({ participants }: { participants: Participa
             <div className="m-4 flex flex-col h-full gap-4">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-medium text-black">Participants</h1>
-                    <RxCross2 className="size-8 text-black cursor-pointer
-                                    hover:text-red-600 hover:scale-125 transition-all duration-300"
+                    <RxCross2
+                        className="size-8 text-black cursor-pointer
+                                   hover:text-red-600 hover:scale-125 transition-all duration-300"
+                        onClick={() => setActivePanel(null)}
                     />
                 </div>
 
