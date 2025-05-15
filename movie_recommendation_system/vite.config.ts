@@ -21,5 +21,10 @@ export default defineConfig({
       'react-icons/fa',
       'lucide-react'
     ]
+  },
+  server: {
+    host: true,        // listen on 0.0.0.0
+    port: 5173,        // optional: specify dev port
+    strictPort: false  // fallback if port is busy
   }
 })

@@ -1,0 +1,122 @@
+import ReactPlayer from "react-player";
+import { useState } from "react";
+import { participantDefault } from "@/types/Participants.ts";
+import { roomInfoDefault } from "@/types/RoomInfo.ts";
+
+import ChatFrame from "@/components/ChatFrame.tsx";
+import RoomDetail from "@/components/RoomDetail.tsx";
+import Participants from "@/components/Participants.tsx";
+
+import { Button } from "@/components/ui/button.tsx";
+
+import { ImPhoneHangUp } from "react-icons/im";
+import { HiOutlineMicrophone } from "react-icons/hi";
+import { FaMicrophoneSlash } from "react-icons/fa6";
+import { Info, Users, MessageSquareText } from "lucide-react";
+
+export default function WatchTogetherPage() {
+    const [isMicOn, setIsMicOn] = useState(true);
+
+    const [activePanel, setActivePanel] = useState<"chat" | "roomDetail" | "participants" | null>(null);
+
+    return (
+        <div className="bg-black h-screen flex flex-col">
+            {/* Video Part */}
+            <div className="flex flex-row h-full m-2">
+                {/* Video Player */}
+                <div className="flex-1 h-full m-4">
+                    <div
+                        className="border-4 border-blue-500 rounded-lg shadow-lg
+                       overflow-hidden bg-gray-900 h-full"
+                    >
+                        <ReactPlayer
+                            url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            className="react-player"
+                            width="100%"
+                            height="100%"
+                            controls
+                            playing
+                        />
+                    </div>
+                </div>
+
+                {/* Side Panel */}
+                <div className="h-full">
+                    {activePanel === "chat" && <ChatFrame setActivePanel={setActivePanel} />}
+                    {activePanel === "roomDetail" && <RoomDetail roomDetail={roomInfoDefault} setActivePanel={setActivePanel} />}
+                    {activePanel === "participants" && <Participants participants={participantDefault} setActivePanel={setActivePanel}/>}
+                </div>
+            </div>
+
+            {/* Buttons Section */}
+            <div
+                className="flex justify-center items-center
+                           border-zinc-600 border-1 gap-4
+                           rounded-lg w-fit mx-auto p-4 mt-4 mb-2"
+            >
+                <div
+                    className="justify-center items-center
+                               border-zinc-600 border-1 rounded-lg"
+                >
+                    <Button
+                        className="bg-black m-1"
+                        onClick={() => setIsMicOn(!isMicOn)}
+                    >
+                        {isMicOn ? (
+                            <HiOutlineMicrophone
+                                className="text-white-600 scale-150
+                                           transition-transform duration-300"
+                            />
+                        ) : (
+                            <FaMicrophoneSlash
+                                className="text-white-600 scale-150
+                                           transition-transform duration-300"
+                            />
+                        )}
+                    </Button>
+                </div>
+                <div
+                    className="justify-center items-center rounded-lg
+                    bg-red-500 hover:bg-red-600 p-1"
+                >
+                    <Button className="bg-red-500 hover:bg-red-600 group">
+                        <ImPhoneHangUp
+                            className="text-white-600 scale-150
+                                   transition-transform duration-300
+                                   group-hover:-translate-y-1"
+                        />
+                    </Button>
+                </div>
+                <div
+                    className="flex gap-3 p-1 justify-center items-center
+                               border-zinc-600 border-1 rounded-lg"
+                >
+                    <Button
+                        className="bg-black"
+                        onClick={() => setActivePanel(activePanel === "roomDetail" ? null : "roomDetail")}
+                    >
+                        <Info
+                            className="text-white-600 scale-125"
+                        />
+                    </Button>
+                    <Button
+                        className="bg-black"
+                        onClick={() => setActivePanel(activePanel === "participants" ? null : "participants")}
+                    >
+                        <Users
+                            className="text-white-600 scale-125"
+                        />
+                    </Button>
+                    <Button
+                        className="bg-black"
+                        onClick={() => setActivePanel(activePanel === "chat" ? null : "chat")}
+                    >
+                        <MessageSquareText
+                            className="text-white-600 scale-125"
+                        />
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
