@@ -17,7 +17,9 @@ const NavAfterLogin: React.FC = () => {
         <nav className="bg-black flex justify-between items-center">
             {/* Logo and navigation button */}
             <div className="flex gap-4 items-center mr-4 ml-4">
-                <SiNetflix className="text-red-600 size-9" />
+                <Button className="bg-transparent">
+                    <SiNetflix className="text-red-600 size-9" />
+                </Button>
                 <Button className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg">
                     Home
                 </Button>
