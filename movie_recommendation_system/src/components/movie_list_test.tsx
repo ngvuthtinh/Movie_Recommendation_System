@@ -4,7 +4,8 @@ import { IoMdEye } from "react-icons/io";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
+
 
 
 export default function MovieListTest() {
@@ -133,113 +134,106 @@ export default function MovieListTest() {
         runtime: `${Math.floor(poster.runtime / 60)}h ${poster.runtime % 60}m`,
         poster_path: `${URL}${poster.poster_path}`,
     }));
+  
+const scrollRef = useRef<HTMLDivElement>(null);
 
-    const [startIndex, setStartIndex] = useState(0);
-    const [visibleCount, setVisibleCount] = useState(4);
+const scrollRight = () => {
+  if (scrollRef.current) scrollRef.current.scrollLeft += 20 * 16 + 24; // 20rem + ~1.5rem gap
+};
 
-    useEffect(() => {
-        const handleResize = () => {
-            const width = window.innerWidth;
-            if (width < 640) setVisibleCount(1);
-            else if (width < 1024) setVisibleCount(2);
-            else if (width < 1280) setVisibleCount(3);
-            else setVisibleCount(4);
-        };
+const scrollLeft = () => {
+  if (scrollRef.current) scrollRef.current.scrollLeft -= 20 * 16 + 24;
+};
 
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    const handlePrev = () => {
-        if (startIndex > 0) setStartIndex(startIndex -1);
-    };
-
-    const handleNext = () => {
-        if (startIndex + visibleCount < postersProcess.length) {
-            setStartIndex(startIndex+1);
-        }
-    };
-
-    return (
-  <div className="relative px-12 py-8 overflow-hidden">
+  
+return (
+  <div className="relative w-full py-8 bg-black">
     {/* Left Arrow */}
     <button
-      onClick={handlePrev}
-      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white 
-                 p-3 rounded-full transition-all duration-300 hover:bg-opacity-80 hover:scale-110 
-                 disabled:opacity-30 disabled:hover:scale-100 z-10"
-      disabled={startIndex === 0}
+      onClick={scrollLeft}
+      className="absolute -left-8 top-1/2 -translate-y-1/2 z-20 p-3 bg-black/60 hover:bg-black rounded-full shadow-lg"
     >
-      <IoIosArrowBack className="text-3xl" />
+      <IoIosArrowBack size={28} className="text-white" />
     </button>
 
-    <div className="flex transition-transform duration-500 ease-in-out"
-                style={{
-                    transform: `translateX(-${(startIndex * 100) / visibleCount}%)`,
-                    width: `${(postersProcess.length * 100) / visibleCount}%`
-                }}
-            ></div>
-
-    {/* Carousel with smooth sliding */}
-    <div className="overflow-hidden w-full">
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${startIndex * 26}rem)` }} // 24rem card + 2rem gap
-      >
-        {postersProcess.map((poster) => (
-          <div key={poster.id} className="flex-shrink-0 w-[24rem] mr-8">
-            <img
-              src={poster.poster_path}
-              alt={poster.title}
-              className="rounded-3xl w-[24rem] h-[13.5rem] hover:scale-110 transition-all duration-300"
-            />
-            <div>
-              <div className="flex mt-4 items-center justify-between">
-                <h2 className="text-white text-xl font-bold">{poster.title}</h2>
-                <div className="flex items-center gap-2">
-                  <p className="text-yellow-300 text-xl font-bold">{poster.vote_average}</p>
-                  <FaStar className="text-yellow-300 text-xl" />
-                </div>
+    {/* Scrollable Movie Row */}
+    <div className="relative w-full overflow-hidden px-4">
+    <div
+      ref={scrollRef}
+      className="flex overflow-x-auto scroll-smooth gap-6 no-scrollbar px-0.5"
+      style={{ scrollBehavior: 'smooth' }}
+    >
+      {postersProcess.map((poster) => (
+        <div
+          key={poster.id}
+          className="
+            flex-shrink-0
+            basis-[95%] sm:basis-[60%] md:basis-[45%]
+            lg:basis-[30%] xl:basis-[25%] 2xl:basis-[20%]
+            transition-transform duration-300"
+        >
+          <img
+            src={poster.poster_path}
+            alt={poster.title}
+            className= "w-full h-[13rem] rounded-2xl"
+          />
+          <div>
+            <div className="flex mt-4 items-center justify-between">
+              <h2 className="text-white text-xl font-bold">{poster.title}</h2>
+              <div className="flex items-center gap-2">
+                <p className="text-yellow-300 text-xl font-bold">{poster.vote_average}</p>
+                <FaStar className="text-yellow-300 text-xl" />
               </div>
+            </div>
 
-              <div className="flex mt-2 gap-1.5 items-center">
-                <SiNetflix className="text-red-600" />
-                <p className="text-white text-sm">{poster.release_date}</p>
-                <p className="text-white text-sm">⋮</p>
-                <p className="text-white text-sm">{poster.vote_average}</p>
-                <p className="text-white text-sm">⋮</p>
-                <p className="text-white text-sm">{poster.runtime}</p>
-                <p className="text-white text-sm">⋮</p>
-                <p className={`${getMatchColor(poster.match)} text-sm ${getMatchFont(poster.match)}`}>
-                  {poster.match}% Match
-                </p>
-              </div>
+            <div className="flex mt-2 gap-1.5 items-center">
+              <SiNetflix className="text-red-600" />
+              <p className="text-white text-sm">{poster.release_date}</p>
+              <p className="text-white text-sm">⋮</p>
+              <p className="text-white text-sm">{poster.vote_average}</p>
+              <p className="text-white text-sm">⋮</p>
+              <p className="text-white text-sm">{poster.runtime}</p>
+              <p className="text-white text-sm">⋮</p>
+              <p className={`${getMatchColor(poster.match)} ${getMatchFont(poster.match)} text-sm`}>
+                {poster.match}% Match
+              </p>
+            </div>
 
-              <div className="flex mt-2 gap-4 items-center justify-between">
-                <p className="text-white text-base">{poster.tagline}</p>
-                <div className="flex gap-4 items-center">
-                  <FaHeart className={`${getColor(poster.isLoved)} size-5`} />
-                  <IoMdEye className={`${getColor(poster.isWatched)} size-7`} />
-                </div>
+            <div className="flex mt-2 gap-4 items-center justify-between">
+              <p className="text-white text-base">{poster.tagline}</p>
+              <div className="flex gap-4 items-center">
+                <FaHeart className={`${getColor(poster.isLoved)} size-5`} />
+                <IoMdEye className={`${getColor(poster.isWatched)} size-7`} />
               </div>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
       </div>
     </div>
 
     {/* Right Arrow */}
     <button
-      onClick={handleNext}
-      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white 
-                 p-3 rounded-full transition-all duration-300 hover:bg-opacity-80 hover:scale-110 
-                 disabled:opacity-30 disabled:hover:scale-100 z-10"
-      disabled={startIndex + visibleCount >= postersProcess.length}
+      onClick={scrollRight}
+      className="absolute -right-8 top-1/2 -translate-y-1/2 z-20 p-3 bg-black/60 hover:bg-black rounded-full shadow-lg"
     >
-      <IoIosArrowForward className="text-3xl" />
+      <IoIosArrowForward size={28} className="text-white" />
     </button>
+
+    {/* Style to hide scrollbars */}
+    <style>
+      {`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}
+    </style>
   </div>
 );
 
 }
+
