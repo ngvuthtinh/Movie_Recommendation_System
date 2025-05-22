@@ -160,7 +160,7 @@ return (
     <div className="relative w-full overflow-hidden px-4">
     <div
       ref={scrollRef}
-      className="flex overflow-x-auto scroll-smooth gap-6 no-scrollbar px-0.5"
+      className="flex overflow-x-auto scroll-smooth gap-6 no-scrollbar"
       style={{ scrollBehavior: 'smooth' }}
     >
       {postersProcess.map((poster) => (
