@@ -50,7 +50,7 @@ export default function MovieList2() {
                     <img
                         src={poster.poster_path}
                         alt={poster.title}
-                        className="rounded-3xl w-[20rem] h-[25rem]
+                        className="rounded-3xl w-[20rem] h-[27rem]
                         hover:scale-110 transition-all duration-300"
                     />
                 </div>

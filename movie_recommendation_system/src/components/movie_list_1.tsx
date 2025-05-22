@@ -72,8 +72,7 @@ export default function MovieList1() {
             match: 50,
             isWatched: false,
             isLoved: true,
-        },
-        
+        },   
     ];
     const postersProcess = posters.map((poster) => ({
         ...poster,
