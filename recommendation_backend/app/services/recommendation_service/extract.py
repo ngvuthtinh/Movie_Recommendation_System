@@ -1,6 +1,6 @@
 import json
 from sqlalchemy.orm import Session
-from app.core.database import get_db
+from app.cores.database import get_db
 from app.models.movie import Movie, Genre, Keyword
 from app.models.movie_relations import MovieKeyword, MovieGenre
 from math import log10

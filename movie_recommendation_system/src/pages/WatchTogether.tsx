@@ -14,7 +14,7 @@ import { HiOutlineMicrophone } from "react-icons/hi";
 import { FaMicrophoneSlash } from "react-icons/fa6";
 import { Info, Users, MessageSquareText } from "lucide-react";
 
-export default function WatchTogetherPage() {
+export default function WatchTogether() {
     const [isMicOn, setIsMicOn] = useState(true);
 
     const [activePanel, setActivePanel] = useState<"chat" | "roomDetail" | "participants" | null>(null);

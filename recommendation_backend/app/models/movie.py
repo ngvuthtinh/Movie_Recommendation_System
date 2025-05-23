@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, Date, Text, Boolean
-from app.core.database import Base
-
+from app.cores.database import Base
 
 class ProductionCountry(Base):
     __tablename__ = "production_country"

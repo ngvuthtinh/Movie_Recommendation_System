@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from app.core.database import Base
-
+from app.cores.database import Base
 
 class WatchRoom(Base):
     __tablename__ = "watch_room"

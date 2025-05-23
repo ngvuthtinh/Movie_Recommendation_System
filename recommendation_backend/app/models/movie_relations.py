@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from app.core.database import Base
-
+from app.cores.database import Base
 
 class MovieCompany(Base):
     __tablename__ = "movie_company"

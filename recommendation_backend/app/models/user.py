@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, DateTime
-from app.core.database import Base
-
+from app.cores.database import Base
 
 # User table
 class User(Base):
@@ -15,7 +14,6 @@ class User(Base):
     created_date = Column(Date)
     avatar_url = Column(String(255))
     password = Column(String(255), nullable=False)
-
 
 # Watching History table
 class WatchingHistory(Base):
