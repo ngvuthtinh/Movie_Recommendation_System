@@ -1,3 +1,0 @@
-cd to /recommendation_backend and run:
-"python -m app.services.recommendation_service.extract"
-to extract the data to json file
