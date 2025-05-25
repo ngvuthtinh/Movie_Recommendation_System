@@ -21,5 +21,8 @@ class UserUpdate(UserBase):
     display_name: str
     avatar_url: str
 
+class UserLogin(BaseModel):
+    email: str
+    password: str
 
 
