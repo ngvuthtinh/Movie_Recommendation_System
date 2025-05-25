@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { LoginFormValues } from "../types/Auth"
 import { useNavigate } from "react-router-dom"
 
+import { login } from "../services/LoginService"
+
 export default function LoginForm() {
   const {
     register,
@@ -16,15 +18,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const response = await fetch("http://localhost:8000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      })
-
-      if (!response.ok) throw new Error("Login failed")
-
-      const resData = await response.json()
+      const resData = await login(data);
       console.log(resData)
       // Store the token in localStorage
       localStorage.setItem("token", resData.access_token);
