@@ -8,7 +8,7 @@ import SignUp from './pages/SignUp'
 import SearchPage from './pages/Search'
 import MyMovieList from './pages/MyMovieList'
 import WatchTogether from './pages/WatchTogether.tsx'
-
+import ProtectedRoute from './routes/ProtectedRoutes.tsx'
 
 function App() {
   return (
@@ -16,13 +16,48 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/film" element={<MyMovieList />} />
-          <Route path="/watch" element={<WatchTogether />} />
+          <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <User />
+                </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <SearchPage />
+                </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/film"
+              element={
+                <ProtectedRoute>
+                  <MyMovieList />
+                </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/watch"
+              element={
+                <ProtectedRoute>
+                  <WatchTogether />
+                </ProtectedRoute>
+              }
+          />
         </Routes>
       </BrowserRouter>
     </>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { RegisterFormValues } from "../types/Auth"
+import { useNavigate } from "react-router-dom"
 
 export default function SignUpForm() {
     const {
@@ -12,11 +13,11 @@ export default function SignUpForm() {
         watch, // Dung cho confirm password
         formState: { errors }
     } = useForm<RegisterFormValues>()
-
+    const navigate = useNavigate()
 
     const onSubmit = async (data: RegisterFormValues) => {
         try {
-            const response = await fetch("http://localhost:8000/api/register", {
+            const response = await fetch("http://localhost:8000/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
@@ -25,6 +26,11 @@ export default function SignUpForm() {
             if (!response.ok) throw new Error("Registration failed")
             const resData = await response.json()
             console.log(resData)
+            // Store the token in localStorage
+            localStorage.setItem("token", resData.access_token);
+            localStorage.setItem("token_type", resData.token_type);
+
+            navigate("/login") // Redirect to login page after successful registration
         } catch (error) {
             console.error("Registration failed:", error)
         }
