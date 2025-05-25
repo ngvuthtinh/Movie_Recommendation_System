@@ -4,17 +4,19 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { LoginFormValues } from "../types/Auth"
+import { useNavigate } from "react-router-dom"
 
 export default function LoginForm() {
   const {
-    register, // Lien ket voi input, xu ly loi
+    register,
     handleSubmit,
     formState: { errors }
   } = useForm<LoginFormValues>()
+  const navigate = useNavigate()
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
+      const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -24,6 +26,11 @@ export default function LoginForm() {
 
       const resData = await response.json()
       console.log(resData)
+      // Store the token in localStorage
+      localStorage.setItem("token", resData.access_token);
+      localStorage.setItem("token_type", resData.token_type);
+
+      navigate("/home")
     } catch (error) {
       console.error("Login failed:", error)
     }
@@ -68,7 +75,11 @@ export default function LoginForm() {
               )}
             </div>
 
-            <Button type="submit" className="w-full bg-black hover:bg-gray-800">
+            <Button
+                type="submit"
+                className="w-full bg-black hover:bg-gray-800"
+                onSubmit={handleSubmit(onSubmit)}
+            >
               Login
             </Button>
 
