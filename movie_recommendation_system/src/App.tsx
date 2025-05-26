@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp'
 import SearchPage from './pages/Search'
 import MyMovieList from './pages/MyMovieList'
 import WatchTogetherPage from './pages/WatchTogetherPage'
+import FilmPage from './pages/FilmPage'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/film" element={<MyMovieList />} />
           <Route path="/watch" element={<WatchTogetherPage />} />
+          <Route path="/filmpage" element={<FilmPage />} />
         </Routes>
       </BrowserRouter>
     </>
