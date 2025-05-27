@@ -9,6 +9,7 @@ import SearchPage from './pages/Search'
 import MyMovieList from './pages/MyMovieList'
 import WatchTogether from './pages/WatchTogether.tsx'
 import ProtectedRoute from './routes/ProtectedRoutes.tsx'
+import FilmPage from './pages/FilmPage.tsx'
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
               }
           />
           <Route
-              path="/film"
+              path="/my-list"
               element={
                 <ProtectedRoute>
                   <MyMovieList />
@@ -55,6 +56,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <WatchTogether />
+                </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/film/"
+              element={
+                <ProtectedRoute>
+                  <FilmPage />
                 </ProtectedRoute>
               }
           />
