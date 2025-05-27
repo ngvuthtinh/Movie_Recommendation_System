@@ -1,0 +1,2 @@
+cd to /recommendation_backend and run:
+"python -m app.services.recommendation.preprocess"
