@@ -1,147 +1,157 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from models import (
-    Base, Movie, Genre, ProductionCompany, ProductionCountry, SpokenLanguage, Keyword,
-    MovieGenre, MovieCompany, MovieCountry, MovieLanguage, MovieKeyword
+import pickle
+from typing import List, Dict
+from sqlalchemy.orm import Session
+from app.models.movie import (
+    Movie, Genre, Keyword, ProductionCompany, ProductionCountry, SpokenLanguage
 )
-from sqlalchemy.exc import SQLAlchemyError
-import pandas as pd
-
-class DataInserter:
-    def __init__(self, db_url: str):
-        self.engine = create_engine(db_url)
-        self.Session = sessionmaker(bind=self.engine) 
-        # Create tables
-        Base.metadata.create_all(self.engine)
-        
-    # Insert all data into the database
-    def insert_all_data(self, processed_data) -> None:
-        session = self.Session()
-        try:
-            # Insert strong tables
-            self.insert_movies(session, processed_data["movie"])
-            self.insert_genres(session, processed_data["genres"])
-            self.insert_production_companies(session, processed_data["production_companies"])
-            self.insert_production_countries(session, processed_data["production_countries"])
-            self.insert_spoken_languages(session, processed_data["spoken_languages"])
-            self.insert_keywords(session, processed_data["keywords"])
-            
-            # Insert associative tables
-            self.insert_movie_genre(session, processed_data["genres_associative"])
-            self.insert_movie_company(session, processed_data["production_companies_associative"])
-            self.insert_movie_country(session, processed_data["production_countries_associative"])
-            self.insert_movie_language(session, processed_data["spoken_languages_associative"])
-            self.insert_movie_keyword(session, processed_data["keywords_associative"])
-            
-            session.commit()
-        except SQLAlchemyError as e:
-            session.rollback()
-            raise Exception(f"Error inserting data: {e}")
-        finally:
-            session.close()
-    
-    # Methods to insert data into the database  
-    def insert_movies(self, session, movie_df: pd.DataFrame) -> None: 
-        for _, row in movie_df.iterrows():
-            movie = Movie(
-                id=row['id'],
-                title=row['title'],
-                release_date=row['release_date'],
-                vote_average=row['vote_average'],
-                vote_count=row['vote_count'],
-                status=row['status'],
-                overview=row['overview'],
-                original_language=row['original_language'],
-                backdrop_path=row['backdrop_path'],
-                poster_path=row['poster_path'],
-                popularity=row['popularity'],
-                adult=row['adult'],
-                runtime=row['runtime'],
-                tagline=row['tagline']
-            )
-            session.merge(movie)
+from app.models.movie_relations import (
+    MovieGenre, MovieKeyword, MovieCompany, MovieCountry, MovieLanguage
+)
 
 
-    def insert_genres(self, session, genre_df: pd.DataFrame) -> None:
-        for _, row in genre_df.iterrows():
-            genre = Genre(
-                genre_name=row['genres_name']
-            )
-            session.merge(genre)
-            
-            
-    def insert_production_companies(self, session, production_company_df: pd.DataFrame) -> None:
-        for _, row in production_company_df.iterrows():
-            production_company = ProductionCompany(
-                company_name=row['production_companies_name']
-            )
-            session.merge(production_company)
-            
- 
-    def insert_production_countries(self, session, production_country_df: pd.DataFrame) -> None:
-        for _, row in production_country_df.iterrows():
-            production_country = ProductionCountry(
-                country=row['production_countries_name']
-            )
-            session.merge(production_country)
-            
-            
-    def insert_spoken_languages(self, session, spoken_language_df: pd.DataFrame) -> None:
-        for _, row in spoken_language_df.iterrows():
-            spoken_language = SpokenLanguage(
-                language=row['spoken_languages_name']
-            )
-            session.merge(spoken_language)
-            
+def insert_all(db: Session, data_path: str) -> None:
+    with open(data_path, 'rb') as file:
+        raw_data = pickle.load(file)
+        data = {}
+        for entry in raw_data:
+            data.update(entry)
 
-    def insert_keywords(self, session, keyword_df: pd.DataFrame) -> None:
-        for _, row in keyword_df.iterrows():
-            keyword = Keyword(
-                word=row['keywords_name']
-            )
-            session.merge(keyword)
-            
+    movie_data = data['movie']
+    genre_data = data['genres_table']
+    keyword_data = data['keywords_table']
+    company_data = data['production_companies_table']
+    country_data = data['production_countries_table']
+    language_data = data['spoken_languages_table']
+    movie_genre_data = data['movie_genres']
+    movie_keyword_data = data['movie_keywords']
+    movie_company_data = data['movie_production_companies']
+    movie_country_data = data['movie_production_countries']
+    movie_language_data = data['movie_spoken_languages']
 
-    def insert_movie_genre(self, session, movie_genre_df: pd.DataFrame) -> None:
-        for _, row in movie_genre_df.iterrows():
-            movie_genre = MovieGenre(
-                movie_id=row['id'],
-                genre_id=session.query(Genre).filter(Genre.genre_name == row['genres_name']).first().id
-            )
-            session.merge(movie_genre)
-            
-            
-    def insert_movie_company(self, session, movie_company_df: pd.DataFrame) -> None:
-        for _, row in movie_company_df.iterrows():
-            movie_company = MovieCompany(
-                movie_id=row['id'],
-                company_id=session.query(ProductionCompany).filter(ProductionCompany.company_name == row['production_companies_name']).first().id
-            )
-            session.merge(movie_company)
-            
-    
-    def insert_movie_country(self, session, movie_country_df: pd.DataFrame) -> None:
-        for _, row in movie_country_df.iterrows():
-            movie_country = MovieCountry(
-                movie_id=row['id'],
-                country=session.query(ProductionCountry).filter(ProductionCountry.country == row['production_countries_name']).first().country
-            )
-            session.merge(movie_country)
-        
-    
-    def insert_movie_language(self, session, movie_language_df: pd.DataFrame) -> None:
-        for _, row in movie_language_df.iterrows():
-            movie_language = MovieLanguage(
-                movie_id=row['id'],
-                language_id=session.query(SpokenLanguage).filter(SpokenLanguage.language == row['spoken_languages_name']).first().id
-            )
-            session.merge(movie_language)
-            
-            
-    def insert_movie_keyword(self, session, movie_keyword_df: pd.DataFrame) -> None:
-        for _, row in movie_keyword_df.iterrows():
-            movie_keyword = MovieKeyword(
-                movie_id=row['id'],
-                keyword_id=session.query(Keyword).filter(Keyword.word == row['keywords_name']).first().id
-            )
-            session.merge(movie_keyword)
+    insert_movie(db, movie_data.to_dict(orient='records'))
+    insert_genre(db, genre_data.to_dict(orient='records'))
+    insert_keyword(db, keyword_data.to_dict(orient='records'))
+    insert_production_company(db, company_data.to_dict(orient='records'))
+    insert_production_country(db, country_data.to_dict(orient='records'))
+    insert_spoken_language(db, language_data.to_dict(orient='records'))
+    insert_movie_genre(db, movie_genre_data.to_dict(orient='records'))
+    insert_movie_keyword(db, movie_keyword_data.to_dict(orient='records'))
+    insert_movie_company(db, movie_company_data.to_dict(orient='records'))
+    insert_movie_country(db, movie_country_data.to_dict(orient='records'))
+    insert_movie_language(db, movie_language_data.to_dict(orient='records'))
+
+
+
+def insert_movie(db: Session, movie_data) -> None:
+    for row in movie_data:
+        movie = Movie(
+            id=row['movie_id'],
+            title=row['title'],
+            release_date=row['release_date'],
+            vote_average=row['vote_average'],
+            vote_count=row['vote_count'],
+            status=row['status'],
+            overview=row['overview'],
+            original_language=row['original_language'],
+            backdrop_path=row['backdrop_path'],
+            poster_path=row['poster_path'],
+            popularity=row['popularity'],
+            adult=row['adult'],
+            runtime=row['runtime'],
+            tagline=row['tagline'],
+        )
+        db.merge(movie)
+    db.commit() 
+
+
+def insert_genre(db: Session, genre_data) -> None:
+    for row in genre_data:
+        genre = Genre(
+            id=row['id'],
+            genre_name=row['genres']
+        )
+        db.merge(genre)
+    db.commit()
+
+def insert_keyword(db: Session, keyword_data) -> None:
+    for row in keyword_data:
+        keyword = Keyword(
+            id=row['id'],
+            word=row['keywords']
+        )
+        db.merge(keyword)
+    db.commit()
+
+
+def insert_production_company(db: Session, company_data) -> None:
+    for row in company_data:
+        company = ProductionCompany(
+            id=row['id'],
+            company_name=row['production_companies']
+        )
+        db.merge(company)
+    db.commit()
+
+
+def insert_production_country(db: Session, country_data) -> None:
+    for row in country_data:
+        country = ProductionCountry(
+            country=row['production_countries']
+        )
+        db.merge(country)
+    db.commit()
+
+
+def insert_spoken_language(db: Session, language_data) -> None:
+    for row in language_data:
+        language = SpokenLanguage(
+            id=row['id'],
+            language=row['spoken_languages']
+        )
+        db.merge(language)
+    db.commit()
+
+def insert_movie_genre(db: Session, movie_genre_data) -> None:
+    for row in movie_genre_data:
+        movie_genre = MovieGenre(
+            movie_id=row['movie_id'],
+            genre_id=row['genres_id']
+        )
+        db.merge(movie_genre)
+    db.commit()
+
+def insert_movie_keyword(db: Session, movie_keyword_data) -> None:
+    for row in movie_keyword_data:
+        movie_keyword = MovieKeyword(
+            movie_id=row['movie_id'],
+            keyword_id=row['keywords_id']
+        )
+        db.merge(movie_keyword)
+    db.commit()
+
+def insert_movie_company(db: Session, movie_company_data) -> None:
+    for row in movie_company_data:
+        movie_company = MovieCompany(
+            movie_id=row['movie_id'],
+            company_id=row['production_companies_id']
+        )
+        db.merge(movie_company)
+    db.commit()
+
+def insert_movie_country(db: Session, movie_country_data) -> None:
+    for row in movie_country_data:
+        movie_country = MovieCountry(
+            movie_id=row['movie_id'],
+            country_id=row['production_countries_id']
+        )
+        db.merge(movie_country)
+    db.commit()
+
+def insert_movie_language(db: Session, movie_language_data) -> None:
+    for row in movie_language_data:
+        movie_language = MovieLanguage(
+            movie_id=row['movie_id'],
+            language_id=row['spoken_languages_id']
+        )
+        db.merge(movie_language)
+    db.commit()

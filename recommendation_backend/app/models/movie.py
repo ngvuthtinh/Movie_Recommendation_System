@@ -3,30 +3,31 @@ from app.cores.database import Base
 
 class ProductionCountry(Base):
     __tablename__ = "production_country"
-    country = Column(String(100), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    country = Column(String(100), unique=True, nullable=False)
 
 
 class ProductionCompany(Base):
     __tablename__ = "production_company"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     company_name = Column(String(100))
 
 
 class SpokenLanguage(Base):
     __tablename__ = "spoken_language"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     language = Column(String(100), unique=True, nullable=False)
 
 
 class Genre(Base):
     __tablename__ = "genre"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     genre_name = Column(String(100), nullable=False)
 
 
 class Keyword(Base):
     __tablename__ = "keyword"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     word = Column(String(100), nullable=False)
 
 

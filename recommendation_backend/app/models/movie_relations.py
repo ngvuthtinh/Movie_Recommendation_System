@@ -10,7 +10,7 @@ class MovieCompany(Base):
 class MovieCountry(Base):
     __tablename__ = "movie_country"
     movie_id = Column(Integer, ForeignKey("movie.id", ondelete="CASCADE"), primary_key=True)
-    country = Column(String(100), ForeignKey("production_country.country", ondelete="CASCADE"), primary_key=True)
+    country_id = Column(Integer, ForeignKey("production_country.id", ondelete="CASCADE"), primary_key=True)
 
 
 class MovieLanguage(Base):

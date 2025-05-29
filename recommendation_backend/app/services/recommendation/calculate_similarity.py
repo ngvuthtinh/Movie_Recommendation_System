@@ -117,18 +117,18 @@ def calculate_similarity(movie_id: int, db: Session, recommendation_type: str) -
     return top_k
 
 
-# if __name__ == "__main__":
-#     db_gen = get_db()
-#     db = next(db_gen)
-#     try:
-#         movie_id = 33 # Example movie ID
-#         recommendation_type = "recommend_for_you"  # Example recommendation type
-#         top_k_similar_movies = calculate_similarity(movie_id, db, recommendation_type)
-#         print(f"Top 10 similar movies for movie ID {movie_id} ({recommendation_type}):")
-#         for movie_id, score in top_k_similar_movies:
-#             print(f"Movie ID: {movie_id}, Similarity Score: {score:.4f}")
-#     finally:
-#         db_gen.close()
+if __name__ == "__main__":
+    db_gen = get_db()
+    db = next(db_gen)
+    try:
+        movie_id = 31 # Example movie ID
+        recommendation_type = "new_released"  # Example recommendation type
+        top_k_similar_movies = calculate_similarity(movie_id, db, recommendation_type)
+        print(f"Top 10 similar movies for movie ID {movie_id} ({recommendation_type}):")
+        for movie_id, score in top_k_similar_movies:
+            print(f"Movie ID: {movie_id}, Similarity Score: {score:.4f}")
+    finally:
+        db_gen.close()
 
 
 

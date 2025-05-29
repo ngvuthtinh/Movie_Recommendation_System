@@ -1,23 +1,19 @@
-from processor import MovieDataProcessor
-from inserter import DataInserter
+from .inserter import insert_all
+from app.cores.database import get_db
 from pathlib import Path
+from app.cores.database import Base
 
 
 def main():
-    DATABASE_URL = "mysql+mysqlconnector://root:123456Aa@localhost:3307/recommendation_backend"
-    DATA_FILE_URL = Path(__file__).parent / "movie_data.csv"
+    db = next(get_db())
     
-    processor = MovieDataProcessor(DATA_FILE_URL)
-    inserter = DataInserter(DATABASE_URL)
+    # Create tables if they do not exist
+    Base.metadata.create_all(bind=db.bind)
     
-    try:
-        # Process the data
-        processed_data = processor.process()
-        
-        # Insert the data into the database
-        inserter.insert_all_data(processed_data)
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    data_path = Path(__file__).parent /'data'/'normalized_movie_data.pkl' 
+    
+    insert_all(db, data_path)
+    print("Data insertion completed successfully.")
 
 
 if __name__ == "__main__":

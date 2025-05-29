@@ -46,9 +46,9 @@ def normalize_release_date(release_date: str) -> float:
     if delta_years < 0:
         return 1.0
     elif delta_years <= 5:
-        return 1.0 - (delta_years / 5.0)  # 0–5 năm: từ 1.0 xuống 0.0
+        return 1.0 - (delta_years / 5.0) 
     else:
-        return 0.0  # Quá cũ: gán về 0
+        return 0.0  
 
 
 """
