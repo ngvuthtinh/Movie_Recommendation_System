@@ -6,16 +6,12 @@ from pathlib import Path
 import pickle
 import numpy as np
 
-"""
-Step 4: Assign Attribute Weights 
-4 different structure of weighted attributes for recommendations:
-    - Recommend for you: define the most affected attributes which affected how the user choose the movies
-    - Top Rated: the attributes related about the rating and number of the votes having more weight
-    - Trending Now:  the attributes related about the rating and the popularity having more weight
-    - New Released: The attributed related to the date having more weight
-"""
 
 def assign_all_weights(db: Session) -> Dict[str, List[float]]:
+    """
+
+    """
+    
     genre_count = db.query(Genre).count()
     keyword_count = db.query(Keyword).count()
     
@@ -37,8 +33,8 @@ def assign_all_weights(db: Session) -> Dict[str, List[float]]:
     for name, (w_avg, w_count, w_pop, w_date) in weight_defs.items():
         remaining_weight = 1.0 - genre_keyword_weights[name]
         weights = (
-            [(genre_keyword_weights[name] / genre_count) * (1 / 4) ] * genre_count +
-            [(genre_keyword_weights[name] / keyword_count) * (3 / 4)] * keyword_count +
+            [(genre_keyword_weights[name] / genre_count) * (2 / 3) ] * genre_count +
+            [(genre_keyword_weights[name] / keyword_count) * (1 / 3)] * keyword_count +
             [
                 w_avg * remaining_weight,
                 w_count * remaining_weight,
@@ -111,10 +107,9 @@ def calculate_similarity(movie_id: int, db: Session, recommendation_type: str) -
     # Combine movie_ids and scores, sort, and print top 10
     similarity = list(zip(movie_ids_others.tolist(), similarity_scores.tolist()))
     similarity.sort(key=lambda x: x[1], reverse=True)
-    top_k = similarity[:10]
     
-    save_similarity_to_cache(movie_id, recommendation_type, top_k)
-    return top_k
+    save_similarity_to_cache(movie_id, recommendation_type, similarity)
+    return similarity
 
 
 if __name__ == "__main__":
