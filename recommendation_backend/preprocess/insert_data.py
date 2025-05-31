@@ -14,7 +14,7 @@ def main():
     
     data_path = Path(__file__).parent /'data'/'normalized_movie_data.pkl' 
     
-    # insert_all(db, data_path)
+    insert_all(db, data_path)
     print("Data insertion completed successfully.")
 
 
