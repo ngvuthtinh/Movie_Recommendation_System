@@ -17,14 +17,14 @@ def assign_all_weights(db: Session) -> Dict[str, List[float]]:
     
     genre_keyword_weights = {
         "recommend_for_you": 0.8,   
-        "top_rated":         0.1,   
+        "top_rated":         0.05,   
         "trending_now":      0.1,   
         "new_released":      0.05  
     }
 
     weight_defs = {
         "recommend_for_you": [0.25, 0.25, 0.25, 0.25],  
-        "top_rated":         [0.8,  0.2,  0.05, 0.05],  
+        "top_rated":         [0.9,  0.05,  0.05, 0],  
         "trending_now":      [0.4,  0.05, 0.5,  0.05], 
         "new_released":      [0.05, 0.05, 0.1,  0.8]
     }

@@ -29,9 +29,7 @@ def normalize_popularity(popularity: float, db: Session) -> float:
     return log10(popularity) / log10(max_popularity) if max_popularity > 0 else 0.0
 
 
-def normalize_release_date(release_date: str) -> float:
-    from datetime import datetime
-    
+def normalize_release_date(release_date: str) -> float:    
     if not release_date:
         return 0.0
     
