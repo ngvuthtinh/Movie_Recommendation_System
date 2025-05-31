@@ -21,19 +21,19 @@ export default function HomePage() {
 
             <div className="mt-8">
                 <h1 className="text-4xl font-bold pl-8">Trending Now</h1>
-                <MovieList1 />
+                <MovieList1 typeOfRecommendation="trending_now"/>
             </div>
             <div className="m-8">
                 <h1 className="text-4xl font-bold">Top Rated</h1>
-                <MovieList1 />
+                <MovieList1 typeOfRecommendation="top_rated"/>
             </div>
             <div className="m-8">
                 <h1 className="text-4xl font-bold">Recommend Movies</h1>
-                <MovieList1 />
+                <MovieList1 typeOfRecommendation="recommend_for_you"/>
             </div>
             <div className="m-8">
                 <h1 className="text-4xl font-bold">New Releases</h1>
-                <MovieList1 />
+                <MovieList1 typeOfRecommendation="new_released"/>
             </div>
 
             <Footer />

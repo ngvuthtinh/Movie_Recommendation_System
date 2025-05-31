@@ -1,11 +1,11 @@
 from app.services.recommendation.calculate_similarity import calculate_similarity
 from sqlalchemy.orm import Session
 from typing import List
-from app.models.user import WatchRecord
+from app.models.user import WatchRecord, WatchingHistory, FavoriteMovie
 from app.models.movie import Movie
+from typing import Optional
 
-
-def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=10) -> List[Movie]:
+def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=10, user_id: Optional[int] = None) -> List[Movie]:
     """
      Recommend movies based on a given movie ID and recommendation type.
     
@@ -21,12 +21,6 @@ def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=
     # Calculate similarity scores for the given movie
     similarity_scores = calculate_similarity(movie_id, db, recommendation_type)
     
-    # # Sort movies by similarity score in descending order
-    # sorted_movies = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
-    
-    # # Return the top n recommended movies
-    # return [movie for movie, score in sorted_movies[:n]]
-    
     recommended_movie_ids = [movie_id for movie_id, score in similarity_scores[: n]]
 
     if not recommended_movie_ids:
@@ -34,6 +28,18 @@ def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=
     
     # Query the database for the recommended movies details
     movies = db.query(Movie).filter(Movie.id.in_(recommended_movie_ids)).all()
+    if user_id:
+        # If user_id is provided, filter out movies that the user has already watched or favorited
+        watched_movie_ids = db.query(WatchRecord.movie_id).filter(WatchRecord.user_id == user_id).all()
+        favorite_movie_ids = db.query(FavoriteMovie.movie_id).filter(FavoriteMovie.user_id == user_id).all()
+        
+        watched_movie_ids = {record.movie_id for record in watched_movie_ids}
+        favorite_movie_ids = {record.movie_id for record in favorite_movie_ids}
+        
+        recommended_movie_ids = [
+            movie_id for movie_id in recommended_movie_ids 
+            if movie_id not in watched_movie_ids and movie_id not in favorite_movie_ids
+        ]
     
     movie_map = {movie.id: movie for movie in movies}
     
@@ -93,6 +99,23 @@ def recommend_for_history(
     movies = db.query(Movie).filter(Movie.id.in_(sorted_movies_ids)).all()
     
     movie_map = {movie.id: movie for movie in movies}
-    ordered_movies = [movie_map[movie_id] for movie_id in sorted_movies_ids if movie_id in movie_map]
+    
+    
+    watched_movie_ids = {wr.movie_id for wr in db.query(WatchRecord).filter(
+        WatchRecord.user_id == user_id,
+        WatchRecord.movie_id.in_(sorted_movies_ids)
+    ).all()}
+    
+    loved_movie_ids = {fm.movie_id for fm in db.query(FavoriteMovie).filter(
+        FavoriteMovie.user_id == user_id,
+        FavoriteMovie.movie_id.in_(sorted_movies_ids)
+    ).all()}
+    
+    for movie in movies:
+        setattr(movie, 'is_watched', movie.id in watched_movie_ids)
+        setattr(movie, 'is_loved', movie.id in loved_movie_ids)
+
+    movie_map = {movie.id: movie for movie in movies}
+    ordered_movies = [movie_map[mid] for mid in sorted_movies_ids if mid in movie_map]
     return ordered_movies
     

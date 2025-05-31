@@ -21,13 +21,14 @@ def get_movie_recommendations(
     ),
     n: int = Query(10, ge=1, le=50, description="Number of recommendations to return"),
     db: Session = Depends(get_db),
-    # current_user: Dict = Depends(get_current_user)
+    current_user: Dict = Depends(get_current_user)
 ):
     """
     Retrieves a list of recommended movie objects based on the consine-similarity algorithm.
     """
     try:
-        recommended_movies = recommend_for_click(movie_id, db, recommendation_type, n)
+        user_id = current_user.get("id") if current_user else None
+        recommended_movies = recommend_for_click(movie_id, db, recommendation_type, n, user_id)
         return recommended_movies # FastAPI will automatically convert List[Movie] to List[MovieOut]
     except ValueError as e:
         raise HTTPException(

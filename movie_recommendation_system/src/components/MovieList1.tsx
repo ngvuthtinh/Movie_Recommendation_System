@@ -1,10 +1,49 @@
+import { useEffect, useState } from 'react'; // Import useState, useEffect
 import { IMovieList1 } from '../types/MovieList1.ts';
 import { SiNetflix } from "react-icons/si";
 import { IoMdEye } from "react-icons/io";
 import { FaHeart, FaStar } from "react-icons/fa";
+import RecommendationService from '../services/RecommendationService.ts'; // Import service
 
-export default function MovieList1() {
-    const URL = 'https://image.tmdb.org/t/p/original';
+type MovieList1Props = {
+    typeOfRecommendation: string;
+};
+
+export default function MovieList1({ typeOfRecommendation }: MovieList1Props) {
+    const URL = 'https://image.tmdb.org/t/p/original'; // Base URL for movie posters
+
+    const [movies, setMovies] = useState<IMovieList1[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            setLoading(true);
+            setError(null); 
+            try {
+                const movieID = 1;
+                const fetchedData = await RecommendationService.getMovieRecommendations(
+                    movieID,
+                    typeOfRecommendation || 'recommend_for_you', // Default to 'recommend_for_you' if not provided
+                    8
+                );
+                setMovies(fetchedData);
+            } catch (err: any) {
+                setError(err.message || 'Failed to fetch recommendations.');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (localStorage.getItem('token')) {
+            fetchMovies();
+        } else {
+            setLoading(false);
+            setError('Please log in to see recommendations.');
+        }
+    }, []); 
+
     // Function to get the color based on the match percentage
     const getMatchColor = (match: number): string => {
         if (match >= 80) return "text-green-400"; // Excellent match
@@ -24,63 +63,30 @@ export default function MovieList1() {
         return isBoolean ? "text-red-500" : "text-gray-500"; // Change color based on watched status
     };
 
-    const posters: IMovieList1[] = [
-        {
-            id: 27205,
-            title: 'Inception',
-            release_date: '2010-07-15',
-            poster_path: '/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg',
-            vote_average: 8.364,
-            runtime: 148,
-            tagline: 'Your mind is the scene of the crime.',
-            match: 90, // Placeholder value
-            isWatched: false, // Placeholder value
-            isLoved: false, // Placeholder value
-        },
-        {
-            id: 157336,
-            title: 'Interstellar',
-            release_date: '2014-11-05',
-            poster_path: '/pbrkL804c8yAv3zBZR4QPEafpAR.jpg',
-            vote_average: 8.417,
-            runtime: 169,
-            tagline: 'Mankind was born on Earth. It was never meant to die here.',
-            match: 80,
-            isWatched: true,
-            isLoved: true,
-        },
-        {
-            id: 155,
-            title: 'The Dark Knight',
-            release_date: '2008-07-16',
-            poster_path: '/nMKdUUepR0i5zn0y1T4CsSB5chy.jpg',
-            vote_average: 8.512,
-            runtime: 152,
-            tagline: 'Welcome to a world without rules.',
-            match: 70,
-            isWatched: true,
-            isLoved: false,
-        },
-        {
-            id: 19995,
-            title: 'Avatar',
-            release_date: '2009-12-15',
-            poster_path: '/vL5LR6WdxWPjLPFRLe133jXWsh5.jpg',
-            vote_average: 7.573,
-            runtime: 162,
-            tagline: 'Enter the world of Pandora.',
-            match: 50,
-            isWatched: false,
-            isLoved: true,
-        },
-    ];
-    const postersProcess = posters.map((poster) => ({
-        ...poster,
-        release_date: poster.release_date.substring(0, 4),
-        vote_average: poster.vote_average.toFixed(1),
-        runtime: `${Math.floor(poster.runtime / 60)}h ${poster.runtime % 60}m`,
-        poster_path: `${URL}${poster.poster_path}`,
+    // Xử lý dữ liệu phim đã fetch để hiển thị
+    const postersProcess = movies.map((movie) => ({
+        ...movie,
+        // Đảm bảo các giá trị không phải null/undefined trước khi xử lý
+        release_date: movie.release_date ? movie.release_date.substring(0, 4) : '',
+        vote_average: movie.vote_average !== undefined ? movie.vote_average.toFixed(1) : '0.0',
+        runtime: movie.runtime !== undefined ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : '0h 0m',
+        // Chỉ thêm URL nếu poster_path tồn tại
+        poster_path: movie.poster_path ? `${URL}${movie.poster_path}` : '',
+        // tagline, match, isWatched, isLoved đã được xử lý trong mapMovieOutToIMovieList1
     }));
+
+    if (loading) {
+        return <div className="text-white text-center mt-10">Loading recommendations...</div>;
+    }
+
+    if (error) {
+        return <div className="text-red-500 text-center mt-10">Error: {error}</div>;
+    }
+
+    if (postersProcess.length === 0) {
+        return <div className="text-white text-center mt-10">No recommendations found.</div>;
+    }
+
     return (
         <div
             className="mt-8 mb-8 ml-24 mr-24
@@ -88,12 +94,18 @@ export default function MovieList1() {
                     bg-black">
             {postersProcess.map((poster) => (
                 <div key={poster.id} className="item-center justify-center relative">
-                    <img
-                        src={poster.poster_path}
-                        alt={poster.title}
-                        className="rounded-3xl w-[24rem] h-[13.5rem]
-                        hover:scale-110 transition-all duration-300"
-                    />
+                    {poster.poster_path ? (
+                        <img
+                            src={poster.poster_path}
+                            alt={poster.title}
+                            className="rounded-3xl w-full h-100 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    ) : (
+                        <div className="rounded-3xl w-[24rem] h-[13.5rem] bg-gray-700 flex items-center justify-center text-white text-center">
+                            No Poster Available
+                        </div>
+                    )}
+                    
                     <div className="">
                         <div className="flex mt-4 items-center justify-between">
                             <h2 className="text-white text-xl font-bold">{poster.title}</h2>
@@ -108,7 +120,7 @@ export default function MovieList1() {
                             <SiNetflix className="text-red-600" />
                             <p className="text-white text-sm font-normal">{poster.release_date}</p>
                             <p className="text-white text-sm font-normal">⋮</p>
-                            <p className="text-white text-sm font-normal">{poster.vote_average}</p>
+                            <p className="text-white text-sm font-normal">{poster.vote_average}</p> 
                             <p className="text-white text-sm font-normal">⋮</p>
                             <p className="text-white text-sm font-normal">{poster.runtime}</p>
                             <p className="text-white text-sm font-normal">⋮</p>

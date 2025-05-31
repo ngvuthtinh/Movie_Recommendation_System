@@ -24,7 +24,7 @@ def assign_all_weights(db: Session) -> Dict[str, List[float]]:
 
     weight_defs = {
         "recommend_for_you": [0.25, 0.25, 0.25, 0.25],  
-        "top_rated":         [0.6,  0.3,  0.05, 0.05],  
+        "top_rated":         [0.8,  0.2,  0.05, 0.05],  
         "trending_now":      [0.4,  0.05, 0.5,  0.05], 
         "new_released":      [0.05, 0.05, 0.1,  0.8]
     }
@@ -112,16 +112,19 @@ def calculate_similarity(movie_id: int, db: Session, recommendation_type: str) -
     return similarity
 
 
+# Create a cache to load into frontend
 if __name__ == "__main__":
     db_gen = get_db()
     db = next(db_gen)
     try:
-        movie_id = 31 # Example movie ID
-        recommendation_type = "new_released"  # Example recommendation type
-        top_k_similar_movies = calculate_similarity(movie_id, db, recommendation_type)
-        print(f"Top 10 similar movies for movie ID {movie_id} ({recommendation_type}):")
-        for movie_id, score in top_k_similar_movies:
-            print(f"Movie ID: {movie_id}, Similarity Score: {score:.4f}")
+        for movie_id in range(1, 3):
+            calculate_similarity(movie_id, db, "recommend_for_you")
+        for movie_id in range(1, 3):
+            calculate_similarity(movie_id, db, "top_rated")
+        for movie_id in range(1, 3):
+            calculate_similarity(movie_id, db, "trending_now")
+        for movie_id in range(1, 3):
+            calculate_similarity(movie_id, db, "new_released")
     finally:
         db_gen.close()
 
