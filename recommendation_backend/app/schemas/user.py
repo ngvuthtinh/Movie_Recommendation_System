@@ -24,5 +24,3 @@ class UserUpdate(UserBase):
 class UserLogin(BaseModel):
     email: str
     password: str
-
-

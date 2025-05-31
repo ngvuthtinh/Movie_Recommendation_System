@@ -33,8 +33,8 @@ def assign_all_weights(db: Session) -> Dict[str, List[float]]:
     for name, (w_avg, w_count, w_pop, w_date) in weight_defs.items():
         remaining_weight = 1.0 - genre_keyword_weights[name]
         weights = (
-            [(genre_keyword_weights[name] / genre_count) * (2 / 3) ] * genre_count +
-            [(genre_keyword_weights[name] / keyword_count) * (1 / 3)] * keyword_count +
+            [(genre_keyword_weights[name] / genre_count) * (1 / 4) ] * genre_count +
+            [(genre_keyword_weights[name] / keyword_count) * (3 / 4)] * keyword_count +
             [
                 w_avg * remaining_weight,
                 w_count * remaining_weight,
