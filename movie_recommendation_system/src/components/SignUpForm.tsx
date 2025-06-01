@@ -5,38 +5,44 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { RegisterFormValues } from "../types/Auth"
 import { useNavigate } from "react-router-dom"
+import { Register } from "../services/RegisterService"
 
 export default function SignUpForm() {
     const {
-        register, // Lien ket voi input, xu ly loi
+        register,
         handleSubmit, 
-        watch, // Dung cho confirm password
+        watch,
+        setError,
         formState: { errors }
     } = useForm<RegisterFormValues>()
     const navigate = useNavigate()
 
     const onSubmit = async (data: RegisterFormValues) => {
         try {
-            const response = await fetch("http://localhost:8000/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            })
+            const resData = await Register(data);
+            console.log("Registration successful:", resData);
 
-            if (!response.ok) throw new Error("Registration failed")
-            const resData = await response.json()
-            console.log(resData)
-            // Store the token in localStorage
+            // Store the tokens
             localStorage.setItem("token", resData.access_token);
             localStorage.setItem("token_type", resData.token_type);
 
-            navigate("/login") // Redirect to login page after successful registration
-        } catch (error) {
-            console.error("Registration failed:", error)
+            // Navigate to login
+            navigate("/login");
+        } catch (error: any) { // Type assertion for error
+            // Show error in the email field
+            alert(error.message);
+            setError('email', {
+                type: 'manual',
+                message: error.message
+            });
         }
-    }
+    };
 
     const password = watch("password") // Confirm password
+
+    const handleNavigateToLogin = () => {
+        navigate("/login")
+    }
 
     return (
         <div className="w-full max-w-[500px] p-9 bg-black/70 rounded-xl shadow-lg">
@@ -75,19 +81,6 @@ export default function SignUpForm() {
                                 </div>
                             </div>
 
-                            {/* <div className="space-y-2">
-                                    <Label htmlFor="display_name">Display Name</Label>
-                                    <Input
-                                        id="display_name"
-                                        type="text"
-                                        placeholder="Tommy"
-                                        {...register("displayName", { required: true })}
-                                    />
-                                    {errors.displayName && (
-                                        <span className="text-sm text-red-500">Display name cannot be leave empty</span>
-                                    )}
-                            </div>                   
-                            */}
                             <div className="space-y-2">
                                 <Label htmlFor="date_of_birth">Date of Birth</Label>
                                 <Input
@@ -106,7 +99,6 @@ export default function SignUpForm() {
                                     {...register("phoneNumber", {required: true})}
                                 />
                             </div>
-
 
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
@@ -145,6 +137,15 @@ export default function SignUpForm() {
                             </div>
 
                             <Button type="submit" className="w-full bg-red-700 hover:bg-red-900">Sign Up</Button>
+                            <p className="text-center text-sm text-gray-500">
+                                Already have an Account?{" "}
+                                <span
+                                    className="underline cursor-pointer text-blue-500 hover:text-blue-700"
+                                    onClick={handleNavigateToLogin}
+                                >
+                                  Login
+                                </span>
+                            </p>
                         </form>
                     </CardContent>
                 </Card>

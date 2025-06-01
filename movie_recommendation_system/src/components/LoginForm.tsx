@@ -27,8 +27,13 @@ export default function LoginForm() {
 
       navigate("/home")
     } catch (error) {
+      alert("Login failed. Please check your credentials and try again.")
       console.error("Login failed:", error)
     }
+  }
+
+  const handleNavigateToSignUp = () => {
+    navigate('/register');
   }
 
   return (
@@ -78,15 +83,14 @@ export default function LoginForm() {
               Login
             </Button>
 
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
-
             <p className="text-center text-sm text-gray-500">
               Don't have an account?{" "}
-              <a href="#" className="underline">
-                Sign up
-              </a>
+              <span
+                  className="underline cursor-pointer text-blue-500 hover:text-blue-700"
+                  onClick={handleNavigateToSignUp}
+              >
+                  Sign up
+                </span>
             </p>
           </form>
         </CardContent>
