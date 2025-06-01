@@ -11,7 +11,21 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useState } from "react";
+import RoomForm from "./RoomForm";
+
 export default function NavAfterLogin() {
+    const [isRoomOpen, setIsRoomOpen] = useState(false);
+
+    const handleCreateRoom = () => {
+        setIsRoomOpen(true);
+    };
+
+    const handleCloseRoom = () => {
+        setIsRoomOpen(false);
+    };
+
+
     return (
         <div className="absolute w-full top-0 z-50 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
             <nav className="bg-black/60 flex justify-between items-center p-4">
@@ -26,6 +40,11 @@ export default function NavAfterLogin() {
                     </Button>
                     <Button className="bg-transparent">
                         Browse Movies
+                    </Button>
+                    <Button
+                        onClick={handleCreateRoom}
+                        className="bg-red-600 text-white hover:bg-red-700 rounded-lg">
+                        Create Movie Room
                     </Button>
                 </div>
 
@@ -62,6 +81,12 @@ export default function NavAfterLogin() {
                     </DropdownMenu>
                 </div>
             </nav>
+
+            {isRoomOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <RoomForm onClose={handleCloseRoom}/>
+                </div>
+            )}
         </div>
     );
 }

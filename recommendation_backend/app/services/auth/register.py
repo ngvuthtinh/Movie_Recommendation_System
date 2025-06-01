@@ -36,7 +36,7 @@ def create_user(db: Session, user_data: UserCreate) -> User:
         password=hashed_password,
         created_date=datetime.now(),
         display_name=user_data.first_name + " " + user_data.last_name,
-        avatar_url=""
+        avatar_url="https://github.com/shadcn.png"
     )
 
     db.add(db_user)
