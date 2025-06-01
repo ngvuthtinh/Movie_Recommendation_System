@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useNavigate} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { WatchRoomLogin } from "@/types/WatchRoom.ts";
-import {RxCross2} from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
+import { LoginRoom } from "@/services/LoginRoomService.ts";
 
 export default function LoginRoomForm({
     setRoomForm,
@@ -17,11 +19,24 @@ export default function LoginRoomForm({
         formState: { errors }
     } = useForm<WatchRoomLogin>();
 
+    const navigate = useNavigate();
+
     const onSubmit = async (data: WatchRoomLogin): Promise<void> => {
         // Handle form submission logic here
         // For example, you can call an API to log in to the room
-        console.log("Form submitted", data);
-        setRoomForm(null)
+        try {
+            const response = await LoginRoom(data);
+            console.log("Login successful:", response);
+
+            localStorage.setItem("access_token", response.access_token);
+            localStorage.setItem("token_type", response.token_type);
+
+            // Navigate to the home page or the room page
+            navigate("/watch");
+        } catch (error) {
+            console.error("Login failed:", error);
+
+        }
     };
 
     return (

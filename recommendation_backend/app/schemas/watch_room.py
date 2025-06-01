@@ -10,3 +10,7 @@ class RoomOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class RoomLogin(BaseModel):
+    room_name: str
+    password: str

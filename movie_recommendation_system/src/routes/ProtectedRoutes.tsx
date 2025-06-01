@@ -1,23 +1,19 @@
-import { Navigate, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect} from 'react';
+import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-export default function ProtectedRoutes ({children}: {children: React.ReactNode}) {
+export default function ProtectedRoutes({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
-        }
+        setIsAuthenticated(!!token);
+        setIsLoading(false);
     }, []);
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/home'); // Redirect to home if authenticated
-        }
-    }, [isAuthenticated, navigate]);
+    if (isLoading) {
+        return null; // or a loading spinner
+    }
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
@@ -25,4 +21,3 @@ export default function ProtectedRoutes ({children}: {children: React.ReactNode}
 
     return <>{children}</>;
 }
-

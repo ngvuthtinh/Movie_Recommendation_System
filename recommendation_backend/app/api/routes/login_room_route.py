@@ -1,27 +1,27 @@
 from fastapi import APIRouter, Depends
 from app.cores.database import get_db
-from app.schemas.user import UserLogin
-from app.services.auth.login import authentication_user
-
+from app.schemas.watch_room import RoomLogin
 from sqlalchemy.orm import Session
 from app.schemas.token import Token
 
 from app.cores.auth import create_token_access
-router = APIRouter(prefix="/auth", tags=["auth"])
+from app.services.room.login_room import authentication_room
+
+router = APIRouter(prefix="/room", tags=["room"])
 
 @router.post("/login", response_model=Token)
-def login(user: UserLogin, db: Session = Depends(get_db)):
+def login(room: RoomLogin, db: Session = Depends(get_db)):
     """
     Authenticate a user and return an access token.
 
     Args:
-        user (UserLogin): The user credentials for authentication.
+        room (RoomLogin): The room credentials for authentication.
         db (Session): The database session.
 
     Returns:
         Token: The access token for the authenticated user.
     """
-    authenticated_user = authentication_user(db, user.email, user.password)
-    access_token = create_token_access(data={"sub": str(authenticated_user.id)})
+    authenticated_room = authentication_room(db, room.room_name, room.password)
+    access_token = create_token_access(data={"sub": str(authenticated_room.id)})
     return {"access_token": access_token, "token_type": "bearer"}
 

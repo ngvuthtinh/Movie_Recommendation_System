@@ -6,14 +6,19 @@ from app.api.routes import register_route
 from app.api.routes import recommendation_route
 from app.api.routes import get_all_movie_route
 from app.api.routes import create_room_route
+from app.api.routes import login_room_route
 
 app = FastAPI()
 
 setup_cors(app)
 
+# Include the authentication and registration routes
 app.include_router(login_route.router)
 app.include_router(register_route.router)
+# Include the recommendation and movie retrieval routes
 app.include_router(recommendation_route.router)
 app.include_router(get_all_movie_route.router)
+
+# Include the room-related routes
 app.include_router(create_room_route.router)
-# Các route khác nếu có
+app.include_router(login_room_route.router)
