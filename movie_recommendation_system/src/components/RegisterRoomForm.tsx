@@ -7,7 +7,8 @@ import {useForm} from "react-hook-form";
 import {RxCross2} from "react-icons/rx";
 import { SearchMovies } from "@/services/SearchMovieService.ts";
 import {MovieSearchTitle} from "@/types/Movie.ts";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { CreateRoom } from "@/services/RegisterRoomService.ts";
 
 export default function RegisterRoomForm({
    setRoomForm,
@@ -25,12 +26,14 @@ export default function RegisterRoomForm({
     const password = watch("password"); // Watch the password field for confirm password validation
 
     const onSubmit = async (data: WatchRoomRegister): Promise<void> => {
-        // Handle form submission logic here
-        // For example, you can call an API to register the room
-        console.log("Form submitted");
-
+        try {
+            const response = await CreateRoom(data);
+            console.log("Room created successfully:", response);
+            setRoomForm(null); // Close the form after successful registration
+        } catch (error) {
+            console.error('Failed to create room:', error);
+        }
         console.log(data);
-        //setRoomForm(null);
     }
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -72,7 +75,6 @@ export default function RegisterRoomForm({
     }, []);
 
     const handleMovieSelect = (movie: MovieSearchTitle) => {
-        console.log("Selected Movie:", movie); // Add this to debug
         setSelectedMovie(movie);
         setValue('movieId', movie.id);
         setSearchTerm(movie.title);
@@ -82,9 +84,10 @@ export default function RegisterRoomForm({
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
+        setShowSuggestions(true); // Always show suggestions when typing
         if (!value) {
             setSelectedMovie(null);
-            setValue('movieId', 0); // Clear the movieId when search is empty
+            setValue('movieId', 0);
             console.log('Cleared movie selection');
         }
     };
@@ -130,7 +133,10 @@ export default function RegisterRoomForm({
                                 />
                                 <input
                                     type="hidden"
-                                    {...register("movieId", { required: true })}
+                                    {...register("movieId", {
+                                        required: true,
+                                        min: { value: 1, message: "Please select a movie" }
+                                    })}
                                 />
                                 {showSuggestions && suggestions.length > 0 && (
                                     <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-auto">
@@ -176,7 +182,13 @@ export default function RegisterRoomForm({
                                 )}
                             </div>
 
-                            <Button type="submit" className="w-full bg-red-700 hover:bg-red-900">Sign Up</Button>
+                            <Button
+                                type="submit"
+                                className="w-full bg-red-700 hover:bg-red-900"
+                                disabled={!selectedMovie}
+                            >
+                                Create Room
+                            </Button>
                             <p className="text-center text-sm text-gray-500">
                                 Already have a room?{" "}
                                 <span

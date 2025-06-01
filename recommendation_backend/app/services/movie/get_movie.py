@@ -10,5 +10,5 @@ def search_movie_titles(db: Session, query: str) -> list[dict]:
     Returns:
         The list of movie titles.
     """
-    titles = db.query(Movie.title).filter(Movie.title.ilike(f"%{query}%")).all()
-    return [{"title": t[0]} for t in titles]
+    movies = db.query(Movie.id, Movie.title).filter(Movie.title.ilike(f"%{query}%")).all()
+    return [{"id": m[0], "title": m[1]} for m in movies]

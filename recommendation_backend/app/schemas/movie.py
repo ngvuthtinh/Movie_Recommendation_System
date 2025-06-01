@@ -19,6 +19,7 @@ class MovieOut(MovieBase):
 
 
 class MovieTitleOut(BaseModel):
+    id: int
     title: str
 
     class Config:
