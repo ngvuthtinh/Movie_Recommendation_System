@@ -24,11 +24,13 @@ export default function RegisterRoomForm({
 
     const password = watch("password"); // Watch the password field for confirm password validation
 
-    const onSubmit = async (): Promise<void> => {
+    const onSubmit = async (data: WatchRoomRegister): Promise<void> => {
         // Handle form submission logic here
         // For example, you can call an API to register the room
         console.log("Form submitted");
-        setRoomForm(null);
+
+        console.log(data);
+        //setRoomForm(null);
     }
 
     const [searchTerm, setSearchTerm] = useState("");
@@ -70,10 +72,21 @@ export default function RegisterRoomForm({
     }, []);
 
     const handleMovieSelect = (movie: MovieSearchTitle) => {
+        console.log("Selected Movie:", movie); // Add this to debug
         setSelectedMovie(movie);
         setValue('movieId', movie.id);
         setSearchTerm(movie.title);
         setShowSuggestions(false);
+    };
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        if (!value) {
+            setSelectedMovie(null);
+            setValue('movieId', 0); // Clear the movieId when search is empty
+            console.log('Cleared movie selection');
+        }
     };
 
     return (
@@ -112,14 +125,12 @@ export default function RegisterRoomForm({
                                     id="movie_search"
                                     type="text"
                                     value={searchTerm}
-                                    onChange={(e) => {
-                                        setSearchTerm(e.target.value);
-                                        if (!e.target.value) {
-                                            setSelectedMovie(null);
-                                            setValue('movieId', '');
-                                        }
-                                    }}
+                                    onChange={handleSearch}
                                     placeholder="Search for a movie..."
+                                />
+                                <input
+                                    type="hidden"
+                                    {...register("movieId", { required: true })}
                                 />
                                 {showSuggestions && suggestions.length > 0 && (
                                     <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-auto">

@@ -1,4 +1,4 @@
 export interface MovieSearchTitle {
-    id: string;
+    id: number;
     title: string
 }

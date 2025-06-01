@@ -3,7 +3,7 @@ export interface WatchRoomLogin {
     password: string;
 }
 export interface WatchRoomRegister {
-    movieId: string;
+    movieId: number;
     roomName: string;
     password: string;
     confirmPassword: string;
