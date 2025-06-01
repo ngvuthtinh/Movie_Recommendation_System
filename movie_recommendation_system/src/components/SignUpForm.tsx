@@ -28,8 +28,7 @@ export default function SignUpForm() {
 
             // Navigate to login
             navigate("/login");
-        } catch (error: any) { // Type assertion for error
-            // Show error in the email field
+        } catch (error: any) {
             alert(error.message);
             setError('email', {
                 type: 'manual',

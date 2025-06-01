@@ -12,6 +12,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<LoginFormValues>()
 
@@ -26,9 +27,18 @@ export default function LoginForm() {
       localStorage.setItem("token_type", resData.token_type);
 
       navigate("/home")
-    } catch (error) {
-      alert("Login failed. Please check your credentials and try again.")
-      console.error("Login failed:", error)
+    } catch (error: any) {
+        // Show error in the email field
+      alert(error.message);
+      setError('email', {
+        type: 'manual',
+        message: error.message
+      });
+      // Optionally, you can also set an error for the password field
+      setError('password', {
+        type: 'manual',
+        message: error.message
+      });
     }
   }
 
