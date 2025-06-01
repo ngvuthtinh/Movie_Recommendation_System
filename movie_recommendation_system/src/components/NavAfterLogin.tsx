@@ -13,6 +13,7 @@ import {
 
 import { useState } from "react";
 import RoomForm from "./RoomForm";
+import {useNavigate} from "react-router-dom";
 
 export default function NavAfterLogin() {
     const [isRoomOpen, setIsRoomOpen] = useState(false);
@@ -25,20 +26,38 @@ export default function NavAfterLogin() {
         setIsRoomOpen(false);
     };
 
-
+    const navigate = useNavigate();
+    const handleNavigateToHome = () => {
+        navigate('/home');
+    }
+    const handleNavigateToMyList = () => {
+        navigate('/my-list');
+    }
+    const handleNavigateToBrowseMovies = () => {
+        navigate('/search');
+    }
     return (
         <div className="absolute w-full top-0 z-50 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
             <nav className="bg-black/60 flex justify-between items-center p-4">
                 {/* Logo and navigation button */}
                 <div className="flex gap-4 items-center mr-4 ml-4">
                     <SiNetflix className="text-red-600 size-9" />
-                    <Button className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg">
+                    <Button
+                        className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg"
+                        onClick={handleNavigateToHome}
+                    >
                         Home
                     </Button>
-                    <Button className="bg-transparent">
+                    <Button
+                        className="bg-transparent"
+                        onClick={handleNavigateToMyList}
+                    >
                         My List
                     </Button>
-                    <Button className="bg-transparent">
+                    <Button
+                        className="bg-transparent"
+                        onClick={handleNavigateToBrowseMovies}
+                    >
                         Browse Movies
                     </Button>
                     <Button
