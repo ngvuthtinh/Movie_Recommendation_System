@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function RoomForm({onClose}: {onClose: () => void}) {
     const [isRegisterRoomForm, setIsRegisterRoomForm] = useState<"login" | "create" | null>("create");
 
+    // Function to handle setting the room form state
     const handleSetRoomForm = (panel: "create" | "login" | null) => {
         if (panel === null) {
             onClose();

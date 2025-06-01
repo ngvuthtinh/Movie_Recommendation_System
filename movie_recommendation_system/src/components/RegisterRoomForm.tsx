@@ -5,6 +5,9 @@ import {Button} from "@/components/ui/button.tsx";
 import {WatchRoomRegister} from "@/types/WatchRoom.ts";
 import {useForm} from "react-hook-form";
 import {RxCross2} from "react-icons/rx";
+import { SearchMovies } from "@/services/SearchMovieService.ts";
+import {MovieSearchTitle} from "@/types/Movie.ts";
+import { useState, useEffect, useRef } from "react";
 
 export default function RegisterRoomForm({
    setRoomForm,
@@ -15,6 +18,7 @@ export default function RegisterRoomForm({
         register,
         handleSubmit,
         watch, // Used for confirm password validation
+        setValue,
         formState: { errors }
     } = useForm<WatchRoomRegister>();
 
@@ -26,6 +30,52 @@ export default function RegisterRoomForm({
         console.log("Form submitted");
         setRoomForm(null);
     }
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [suggestions, setSuggestions] = useState<MovieSearchTitle[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState<MovieSearchTitle | null>(null);
+    const suggestionsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (searchTerm) {
+                try {
+                    const movies = await SearchMovies(searchTerm);
+                    setSuggestions(movies);
+                    setShowSuggestions(true);
+                } catch (error) {
+                    console.error('Failed to fetch movies:', error);
+                    setSuggestions([]);
+                }
+            } else {
+                setSuggestions([]);
+                setShowSuggestions(false);
+            }
+        };
+
+        const debounceTimer = setTimeout(fetchSuggestions, 300);
+        return () => clearTimeout(debounceTimer);
+    }, [searchTerm]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+                setShowSuggestions(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleMovieSelect = (movie: MovieSearchTitle) => {
+        setSelectedMovie(movie);
+        setValue('movieId', movie.id);
+        setSearchTerm(movie.title);
+        setShowSuggestions(false);
+    };
+
     return (
         <div className="w-full max-w-[500px] p-9 bg-black/70 rounded-xl shadow-lg">
             <div className="flex items-center justify-center">
@@ -56,16 +106,36 @@ export default function RegisterRoomForm({
                                 )}
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="movie_id">Movie ID</Label>
+                            <div className="space-y-2 relative" ref={suggestionsRef}>
+                                <Label htmlFor="movie_search">Movie Name</Label>
                                 <Input
-                                    id="movie_id"
+                                    id="movie_search"
                                     type="text"
-                                    placeholder="Enter Movie ID"
-                                    {...register("movieId", { required: true })}
+                                    value={searchTerm}
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
+                                        if (!e.target.value) {
+                                            setSelectedMovie(null);
+                                            setValue('movieId', '');
+                                        }
+                                    }}
+                                    placeholder="Search for a movie..."
                                 />
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-auto">
+                                        {suggestions.map((movie) => (
+                                            <div
+                                                key={movie.id}
+                                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                                onClick={() => handleMovieSelect(movie)}
+                                            >
+                                                {movie.title}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 {errors.movieId && (
-                                    <span className="text-sm text-red-500">Movie ID cannot be empty</span>
+                                    <span className="text-sm text-red-500">Please select a movie</span>
                                 )}
                             </div>
 

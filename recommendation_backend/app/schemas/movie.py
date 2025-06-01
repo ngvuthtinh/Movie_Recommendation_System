@@ -16,3 +16,10 @@ class MovieBase(BaseModel):
 class MovieOut(MovieBase):
     class Config:
         from_attributes = True
+
+
+class MovieTitleOut(BaseModel):
+    title: str
+
+    class Config:
+        from_attributes = True
