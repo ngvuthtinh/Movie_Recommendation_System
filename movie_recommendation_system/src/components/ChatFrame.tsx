@@ -23,7 +23,10 @@ export default function ChatFrame({ setActivePanel, roomId }: ChatFrameProps) {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") handleSend();
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevent the default action of the Enter key
+            handleSend();
+        }
     };
 
     return (
@@ -74,7 +77,7 @@ export default function ChatFrame({ setActivePanel, roomId }: ChatFrameProps) {
                         className="rounded-full w-full pr-10 pl-4 text-black [&::placeholder]:pl-1"
                         value={inputValue}
                         onChange={e => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyDown}
                         disabled={!isChatMode}
                     />
                     <GoPaperAirplane

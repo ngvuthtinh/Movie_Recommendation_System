@@ -22,7 +22,7 @@ export default function WatchTogether() {
     const [activePanel, setActivePanel] = useState<"chat" | "roomDetail" | "participants" | null>(null);
 
     const { roomId } = useParams<{ roomId: string }>();
-
+    console.log(roomId);
 
     return (
         <div className="bg-black h-screen flex flex-col">

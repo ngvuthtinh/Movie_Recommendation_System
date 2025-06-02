@@ -34,7 +34,7 @@ export default function RegisterRoomForm({
             localStorage.setItem("room_token", response.access_token);
             localStorage.setItem("token_type", response.token_type);
 
-            navigate(`/watch/${response.roomId}`); // Navigate to the room page after successful creation
+            navigate(`/watch/${response.room_id}`); // Navigate to the room page after successful creation
 
             setRoomForm(null); // Close the form after successful registration
         } catch (error) {
