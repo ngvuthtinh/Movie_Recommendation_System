@@ -12,13 +12,14 @@ class WebSocketMediator:
         if room_id not in self.active_connections:
             self.active_connections[room_id] = set()
         self.active_connections[room_id].add(websocket)
+        print(f"Connected to room {room_id}. Total connections: {len(self.active_connections[room_id])}")
 
     def disconnect(self, websocket: WebSocket, room_id: str):
-        """Disconnect a WebSocket client from a room."""
-        if room_id in self.active_connections:
-            self.active_connections[room_id].discard(websocket)
-            if not self.active_connections[room_id]:
-                del self.active_connections[room_id]
+            """Disconnect a WebSocket client from a room."""
+            if room_id in self.active_connections:
+                self.active_connections[room_id].discard(websocket)
+                if not self.active_connections[room_id]:
+                    del self.active_connections[room_id]
 
     async def notify(self, room_id: str, message: dict):
         """Broadcast a message to all clients in a room."""

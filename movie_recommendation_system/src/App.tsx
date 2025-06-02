@@ -60,7 +60,7 @@ function App() {
               }
           />
           <Route
-              path="/watch/:id"
+              path="/watch/:roomId"
               element={
                 <ProtectedRoutes>
                     <WatchTogether />
