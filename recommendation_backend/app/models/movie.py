@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Date, Text, Boolean
 from app.cores.database import Base
+from app.models.movie_relations import MovieGenre, MovieKeyword, MovieCompany, MovieLanguage
+from sqlalchemy.orm import relationship
 
 class ProductionCountry(Base):
     __tablename__ = "production_country"
@@ -17,7 +19,6 @@ class SpokenLanguage(Base):
     __tablename__ = "spoken_language"
     id = Column(Integer, primary_key=True)
     language = Column(String(100), unique=True, nullable=False)
-
 
 class Genre(Base):
     __tablename__ = "genre"
@@ -48,3 +49,9 @@ class Movie(Base):
     runtime = Column(Integer)
     tagline = Column(Text)
     movie_link = Column(String(255))
+
+    # Relationships
+    genres = relationship("Genre", secondary="movie_genre", backref="movies")
+    keywords = relationship("Keyword", secondary="movie_keyword", backref="movies")
+    companies = relationship("ProductionCompany", secondary="movie_company", backref="movies")
+    languages = relationship("SpokenLanguage", secondary="movie_language", backref="movies")

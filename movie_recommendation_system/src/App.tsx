@@ -60,7 +60,7 @@ function App() {
               }
           />
           <Route
-              path="/film/"
+              path="/film/:id"
               element={
                 <ProtectedRoute>
                   <FilmPage />
