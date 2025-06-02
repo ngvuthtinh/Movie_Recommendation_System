@@ -1,5 +1,5 @@
 import ReactPlayer from "react-player";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { participantDefault } from "@/types/Participants.ts";
 import { roomInfoDefault } from "@/types/RoomInfo.ts";
@@ -26,12 +26,68 @@ export default function WatchTogether() {
 
     const [movieUrl, setMovieUrl] = useState<string>("");
 
+    const [playing, setPlaying] = useState(true);
+    const socketRef = useRef<WebSocket | null>(null);
+    const isRemoteAction = useRef(false);
+
     useEffect(() => {
         if (!roomId) return;
         getMovieLink(roomId)
             .then(data => setMovieUrl(data.link)) // Adjust property if needed
             .catch(() => setMovieUrl(""));
     }, [roomId]);
+
+    // Setup WebSocket for play/pause sync
+    useEffect(() => {
+        if (!roomId) return;
+        const ws = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
+        socketRef.current = ws;
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "play-pause") {
+                    isRemoteAction.current = true;
+                    setPlaying(data.play);
+                }
+            } catch (error) {
+                console.error("Failed to parse WebSocket message:", error);
+            }
+        };
+
+        ws.onclose = () => {
+            socketRef.current = null;
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [roomId]);
+
+    // Emit play/pause event
+    const handlePlayPause = (play: boolean) => {
+        setPlaying(play);
+        if (socketRef.current && socketRef.current.readyState === 1) {
+            socketRef.current.send(JSON.stringify({ type: "play-pause", play }));
+        }
+    };
+
+    // Prevent feedback loop when receiving remote play/pause
+    const onPlay = () => {
+        if (isRemoteAction.current) {
+            isRemoteAction.current = false;
+            return;
+        }
+        handlePlayPause(true);
+    };
+
+    const onPause = () => {
+        if (isRemoteAction.current) {
+            isRemoteAction.current = false;
+            return;
+        }
+        handlePlayPause(false);
+    };
 
     return (
         <div className="bg-black h-screen flex flex-col">
@@ -49,7 +105,9 @@ export default function WatchTogether() {
                             width="100%"
                             height="100%"
                             controls
-                            playing
+                            playing={playing}
+                            onPlay={onPlay}
+                            onPause={onPause}
                         />
                     </div>
                 </div>

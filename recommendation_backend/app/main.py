@@ -10,7 +10,7 @@ from app.api.routes import login_room_route
 from app.api.routes import user_route
 from app.api.routes import movie_route
 from app.api.routes import room_route
-
+from app.api.routes import ws_room
 app = FastAPI()
 
 setup_cors(app)
@@ -29,6 +29,7 @@ app.include_router(login_room_route.router)
 # Include the user profile routes
 app.include_router(user_route.router)
 app.include_router(room_route.router)
+app.include_router(ws_room.router)
 
 # Include the movie-related routes
 app.include_router(movie_route.router)
