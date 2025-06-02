@@ -7,6 +7,7 @@ from app.api.routes import recommendation_route
 from app.api.routes import get_all_movie_route
 from app.api.routes import create_room_route
 from app.api.routes import login_room_route
+from app.api.routes import user_route
 
 app = FastAPI()
 
@@ -22,3 +23,6 @@ app.include_router(get_all_movie_route.router)
 # Include the room-related routes
 app.include_router(create_room_route.router)
 app.include_router(login_room_route.router)
+
+# Include the user profile routes
+app.include_router(user_route.router)
