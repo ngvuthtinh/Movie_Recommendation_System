@@ -61,4 +61,8 @@ class MovieDetail(BaseModel):
     companies: List[CompanyOut]
     languages: List[LanguageOut]
 
+class MovieLink(BaseModel):
+    id: int
+    link: str
+
 

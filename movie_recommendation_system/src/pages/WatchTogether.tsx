@@ -1,8 +1,9 @@
 import ReactPlayer from "react-player";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { participantDefault } from "@/types/Participants.ts";
 import { roomInfoDefault } from "@/types/RoomInfo.ts";
+import { getMovieLink } from "@/services/MovieLinkService.ts";
 
 import ChatFrame from "@/components/ChatFrame.tsx";
 import RoomDetail from "@/components/RoomDetail.tsx";
@@ -23,6 +24,15 @@ export default function WatchTogether() {
 
     const { roomId } = useParams<{ roomId: string }>();
 
+    const [movieUrl, setMovieUrl] = useState<string>("");
+
+    useEffect(() => {
+        if (!roomId) return;
+        getMovieLink(roomId)
+            .then(data => setMovieUrl(data.link)) // Adjust property if needed
+            .catch(() => setMovieUrl(""));
+    }, [roomId]);
+
     return (
         <div className="bg-black h-screen flex flex-col">
             {/* Video Part */}
@@ -34,7 +44,7 @@ export default function WatchTogether() {
                        overflow-hidden bg-gray-900 h-full"
                     >
                         <ReactPlayer
-                            url=""
+                            url={movieUrl}
                             className="react-player"
                             width="100%"
                             height="100%"

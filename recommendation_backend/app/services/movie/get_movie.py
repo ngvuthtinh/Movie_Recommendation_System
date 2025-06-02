@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm import joinedload
 from app.models.movie import Movie
@@ -6,8 +7,10 @@ from app.schemas.movie import (
     GenreOut,
     KeywordOut,
     CompanyOut,
-    LanguageOut
+    LanguageOut,
+    MovieLink
 )
+from app.services.room.get_room import get_room_by_id
 
 
 def search_movie_titles(db: Session, query: str) -> list[dict]:
@@ -56,3 +59,17 @@ def get_movie_detail(db: Session, movie_id: int) -> MovieDetail:
         companies=[CompanyOut(id=c.id, company_name=c.company_name) for c in movie.companies],
         languages=[LanguageOut(id=l.id, language=l.language) for l in movie.languages]
     )
+
+def get_movie_stream (db: Session, room_id: int) -> MovieLink:
+    """
+    Get the movie stream for a specific room by its ID.
+    """
+    room = get_room_by_id(room_id, db)
+
+    if not room:
+        raise HTTPException(status_code=404, detail="Movie is not available for streaming")
+    movie = db.query(Movie).filter(Movie.id == room.movie_id).first()
+    if not movie or not movie.movie_link:
+        raise HTTPException(status_code=404, detail="Movie is not available for streaming")
+
+    return MovieLink(id=movie.id, link=movie.movie_link)

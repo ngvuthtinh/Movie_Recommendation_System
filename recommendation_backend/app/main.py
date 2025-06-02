@@ -32,3 +32,4 @@ app.include_router(room_route.router)
 
 # Include the movie-related routes
 app.include_router(movie_route.router)
+
