@@ -8,8 +8,8 @@ import SignUp from './pages/SignUp'
 import SearchPage from './pages/Search'
 import MyMovieList from './pages/MyMovieList'
 import WatchTogether from './pages/WatchTogether.tsx'
-import ProtectedRoute from './routes/ProtectedRoutes.tsx'
 import FilmPage from './pages/FilmPage.tsx'
+import ProtectedRoutes from "./routes/ProtectedRoutes.tsx";
 
 function App() {
   return (
@@ -22,49 +22,57 @@ function App() {
           <Route
               path="/user"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <User />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
           />
           <Route
               path="/home"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <HomePage />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
           />
           <Route
               path="/search"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <SearchPage />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
           />
           <Route
               path="/my-list"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <MyMovieList />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
           />
           <Route
               path="/watch"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <WatchTogether />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
           />
           <Route
               path="/film/:id"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <FilmPage />
-                </ProtectedRoute>
+                </ProtectedRoutes>
+              }
+          />
+          <Route
+              path="/watch/:id"
+              element={
+                <ProtectedRoutes>
+                    <FilmPage />
+                </ProtectedRoutes>
               }
           />
         </Routes>

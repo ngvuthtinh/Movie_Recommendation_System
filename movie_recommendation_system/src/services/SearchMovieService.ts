@@ -8,3 +8,7 @@ export async function SearchMovies(query: string) {
 
     return response.json();
 }
+
+export async function SearchMovieByAttribute() {
+
+}
