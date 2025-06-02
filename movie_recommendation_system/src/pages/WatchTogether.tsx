@@ -1,5 +1,5 @@
 import ReactPlayer from "react-player";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { participantDefault } from "@/types/Participants.ts";
 import { roomInfoDefault } from "@/types/RoomInfo.ts";
@@ -38,29 +38,75 @@ export default function WatchTogether() {
     }, [roomId]);
 
     // Setup WebSocket for play/pause sync
+    const [wsStatus, setWsStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
+    const reconnectTimeoutRef = useRef<NodeJS.Timeout>(null);
+    const MAX_RECONNECT_ATTEMPTS = 5;
+    const reconnectAttemptsRef = useRef(0);
+
+// Replace your existing WebSocket useEffect with this improved version
     useEffect(() => {
         if (!roomId) return;
-        const ws = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
-        socketRef.current = ws;
 
-        ws.onmessage = (event) => {
+        const connectWebSocket = () => {
             try {
-                const data = JSON.parse(event.data);
-                if (data.type === "play-pause") {
-                    isRemoteAction.current = true;
-                    setPlaying(data.play);
-                }
+                setWsStatus('connecting');
+                const ws = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
+                socketRef.current = ws;
+
+                ws.onopen = () => {
+                    setWsStatus('connected');
+                    reconnectAttemptsRef.current = 0;
+                    console.log('WebSocket connected');
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log('Received WebSocket message:', data);
+                        if (data.type === "play-pause") {
+                            isRemoteAction.current = true;
+                            setPlaying(data.play);
+                            console.log('Updated playing state:', data.play);
+                        }
+                    } catch (error) {
+                        console.error("Failed to parse WebSocket message:", error);
+                    }
+                };
+
+                ws.onclose = () => {
+                    setWsStatus('disconnected');
+                    socketRef.current = null;
+
+                    // Attempt reconnection if not exceeded max attempts
+                    if (reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
+                        reconnectAttemptsRef.current += 1;
+                        reconnectTimeoutRef.current = setTimeout(() => {
+                            connectWebSocket();
+                        }, 2000 * Math.pow(2, reconnectAttemptsRef.current - 1)); // Exponential backoff
+                    }
+                };
+
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+
             } catch (error) {
-                console.error("Failed to parse WebSocket message:", error);
+                console.error('WebSocket connection error:', error);
+                setWsStatus('disconnected');
             }
         };
 
-        ws.onclose = () => {
-            socketRef.current = null;
-        };
+        connectWebSocket();
 
+        // Cleanup function
         return () => {
-            ws.close();
+            if (socketRef.current) {
+                socketRef.current.close();
+            }
+            if (reconnectTimeoutRef.current) {
+                clearTimeout(reconnectTimeoutRef.current);
+            }
+            reconnectAttemptsRef.current = 0;
         };
     }, [roomId]);
 

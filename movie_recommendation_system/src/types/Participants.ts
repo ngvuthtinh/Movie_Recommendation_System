@@ -9,23 +9,16 @@ export interface Participant {
 export const participantDefault: Participant[] = [
     {
         avatarUrl: "https://github.com/shadcn.png",
-        name: "John Doe",
+        name: "Son Dang",
         id: "user1",
         isHost: true,
         isMicOn: true,
     },
     {
         avatarUrl: "https://github.com/shadcn.png",
-        name: "Jane Smith",
+        name: "Phuong Pham",
         id: "user2",
         isHost: false,
-        isMicOn: false,
-    },
-    {
-        avatarUrl: "https://github.com/shadcn.png",
-        name: "Alice Johnson",
-        id: "user3",
-        isHost: false,
         isMicOn: true,
-    },
+    }
 ];

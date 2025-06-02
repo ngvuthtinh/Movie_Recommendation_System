@@ -5,7 +5,7 @@ export interface RoomInfo {
 }
 
 export const roomInfoDefault: RoomInfo = {
-    roomID: "123456",
-    roomName: "My Room",
-    roomPassword: "password123",
+    roomID: "12",
+    roomName: "TESTFE1",
+    roomPassword: "1",
 }
