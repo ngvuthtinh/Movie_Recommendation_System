@@ -6,7 +6,7 @@ export default function ProtectedRoutes({ children }: { children: React.ReactNod
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('user_token');
         setIsAuthenticated(!!token);
         setIsLoading(false);
     }, []);

@@ -9,6 +9,7 @@ import { SearchMovies } from "@/services/SearchMovieService.ts";
 import {MovieSearchTitle} from "@/types/Movie.ts";
 import React, { useState, useEffect, useRef } from "react";
 import { CreateRoom } from "@/services/RegisterRoomService.ts";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterRoomForm({
    setRoomForm,
@@ -24,7 +25,7 @@ export default function RegisterRoomForm({
     } = useForm<WatchRoomRegister>();
 
     const password = watch("password"); // Watch the password field for confirm password validation
-
+    const navigate = useNavigate();
     const onSubmit = async (data: WatchRoomRegister): Promise<void> => {
         try {
             const response = await CreateRoom(data);
@@ -32,6 +33,8 @@ export default function RegisterRoomForm({
 
             localStorage.setItem("room_token", response.access_token);
             localStorage.setItem("token_type", response.token_type);
+
+            navigate(`/watch/${response.roomId}`); // Navigate to the room page after successful creation
 
             setRoomForm(null); // Close the form after successful registration
         } catch (error) {

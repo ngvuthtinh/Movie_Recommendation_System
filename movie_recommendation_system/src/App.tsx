@@ -52,14 +52,6 @@ function App() {
               }
           />
           <Route
-              path="/watch"
-              element={
-                <ProtectedRoutes>
-                  <WatchTogether />
-                </ProtectedRoutes>
-              }
-          />
-          <Route
               path="/film/:id"
               element={
                 <ProtectedRoutes>
@@ -71,7 +63,7 @@ function App() {
               path="/watch/:id"
               element={
                 <ProtectedRoutes>
-                    <FilmPage />
+                    <WatchTogether />
                 </ProtectedRoutes>
               }
           />

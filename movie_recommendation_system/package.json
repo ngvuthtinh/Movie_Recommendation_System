@@ -29,6 +29,7 @@
     "react-image": "^4.1.0",
     "react-player": "^2.16.0",
     "react-router-dom": "^7.2.0",
+    "sonner": "^2.0.4",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.0.9"
   },

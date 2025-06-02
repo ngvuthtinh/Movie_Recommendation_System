@@ -32,7 +32,8 @@ export default function LoginRoomForm({
             localStorage.setItem("token_type", response.token_type);
 
             // Navigate to the home page or the room page
-            navigate("/watch");
+            navigate(`/watch/${response.roomId}`);
+            setRoomForm(null); // Close the form after successful login
         } catch (error) {
             console.error("Login failed:", error);
 

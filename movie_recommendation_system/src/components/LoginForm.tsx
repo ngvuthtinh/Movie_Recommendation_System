@@ -25,7 +25,8 @@ export default function LoginForm() {
       // Store the token in localStorage
       localStorage.setItem("user_token", resData.access_token);
       localStorage.setItem("token_type", resData.token_type);
-      navigate("/home")
+
+      navigate("/home");
     } catch (error: any) {
         // Show error in the email field
       alert(error.message);
