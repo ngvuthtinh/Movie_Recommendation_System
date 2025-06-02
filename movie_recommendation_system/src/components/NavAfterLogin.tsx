@@ -42,7 +42,7 @@ export default function NavAfterLogin() {
     }
 
     const handleViewProfile = () => {
-        navigate('/profile');
+        navigate('/user');
     }
 
     const handleSignOut = () => {
