@@ -1,6 +1,10 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
+const handleSignInClick = () => {
+    window.location.href = '/login';
+}
+
 export default function NavBeforeLogin() {
     return(
         <div className="absolute w-full top-0 z-50 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
@@ -27,9 +31,11 @@ export default function NavBeforeLogin() {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                        <Button className='bg-red-600 rounded-full px-6
+                        <Button 
+                            className='bg-red-600 rounded-full px-6
                                         hover:bg-red-500 hover:scale-110 transition-all
-                                        duration-300 hover:text-black '>
+                                        duration-300 hover:text-black '
+                            onClick={handleSignInClick}>
                             Sign In
                         </Button>
                 </div>

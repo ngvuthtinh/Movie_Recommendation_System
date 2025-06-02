@@ -10,6 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 import { useState } from "react";
 import RoomForm from "./RoomForm";
@@ -25,6 +26,29 @@ export default function NavAfterLogin() {
         setIsRoomOpen(false);
     };
 
+    // Navigate to user profile page "/user/profile"
+    const handleViewProfile = () => {
+        window.location.href = "/user";
+    }
+
+    const handleSignOut = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        toast.success("You have been signed out successfully!");
+    }
+
+    const handleHomeClick = () => {
+        window.location.href = '/home';
+    }
+
+    const handleMyListClick = () => {
+        window.location.href = '/my-list';
+    }
+
+    const handleBrowseMoviesClick = () => {
+        window.location.href = '/search';
+    }
+
 
     return (
         <div className="absolute w-full top-0 z-50 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
@@ -32,13 +56,20 @@ export default function NavAfterLogin() {
                 {/* Logo and navigation button */}
                 <div className="flex gap-4 items-center mr-4 ml-4">
                     <SiNetflix className="text-red-600 size-9" />
-                    <Button className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg">
+                    <Button 
+                        className="bg-transparent rounded-none hover:bg-red-600 hover:rounded-b-lg"
+                        onClick={handleHomeClick}
+                    >
                         Home
                     </Button>
-                    <Button className="bg-transparent">
+                    <Button 
+                        className="bg-transparent"
+                        onClick={handleMyListClick}>
                         My List
                     </Button>
-                    <Button className="bg-transparent">
+                    <Button 
+                        className="bg-transparent"
+                        onClick={handleBrowseMoviesClick}>
                         Browse Movies
                     </Button>
                     <Button
@@ -70,11 +101,13 @@ export default function NavAfterLogin() {
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-48">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleViewProfile}>
                                 View Profile
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 font-bold">
+                            <DropdownMenuItem 
+                                className="text-red-600 font-bold" 
+                                onClick={handleSignOut}>
                                 Sign Out
                             </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional, Dict
 from app.schemas.movie import MovieOut
 from app.cores.database import get_db
-from app.cores.dependencies import get_current_user
+from app.cores.dependencies import get_current_user_id
 from app.services.recommendation.recommend import recommend_for_click, recommend_for_history    
 
 router = APIRouter(prefix="/recommendation", tags=["recommendation"])
@@ -21,7 +21,7 @@ def get_movie_recommendations(
     ),
     n: int = Query(10, ge=1, le=50, description="Number of recommendations to return"),
     db: Session = Depends(get_db),
-    current_user: Dict = Depends(get_current_user)
+    current_user: Dict = Depends(get_current_user_id)
 ):
     """
     Retrieves a list of recommended movie objects based on the consine-similarity algorithm.
@@ -54,7 +54,7 @@ def get_user_recommendations(
     n: int = Query(10, ge=1, le=50, description="Number of recommendations to return"),
     history_size: int = Query(10, ge=1, le=50, description="Number of recent movies to consider from the user's history"),
     db: Session = Depends(get_db),
-    current_user: Dict = Depends(get_current_user)
+    current_user: Dict = Depends(get_current_user_id)
 ):
     """
     Retrieves a list of recommended movie objects based on the user's watch history.

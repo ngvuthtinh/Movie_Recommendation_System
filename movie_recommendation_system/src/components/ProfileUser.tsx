@@ -1,58 +1,68 @@
-import { useState } from "react";
-import { ProfileUserProps } from "@/types/User";
+import { useEffect, useState } from "react";
+import { ProfileUserProps, ChangePassword } from "@/types/User";
 import { Img } from "react-image";
 import { LuPencil } from "react-icons/lu";
 import { ChangeAvatar } from "@/components/ChangeAvatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
+import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 
-export default function ProfileUser({ onDisplayNameChange, ...userProfile }: ProfileUserProps) {
+export default function ProfileUser({
+    onDisplayNameChange,
+    onPasswordChange,
+    onAvatarChange,
+    onSignOut,
+    userProfile,
+}: ProfileUserProps) {
     const [showChangeAvatar, setShowChangeAvatar] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [animatePasswordModal, setAnimatePasswordModal] = useState(false);
     const [isEditingName, setEditingName] = useState(false);
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [nameInput, setNameInput] = useState(userProfile.displayName);
 
-    const hanldeChangeName = () => {
-        setEditingName(false); 
-        onDisplayNameChange(nameInput || ""); 
-    }
+    useEffect(() => {
+        setNameInput(userProfile.displayName);
+    }, [userProfile.displayName]);
 
-    // TODO: handleChangeAvatar = () => {}
+    const handleSaveDisplayName = () => {
+        setEditingName(false);
+        if (nameInput !== userProfile.displayName) {
+            onDisplayNameChange(nameInput);
+        }
+    };
 
-    const handleChangePassword = () => {
-    //     // Gợi ý: mở một modal hoặc điều hướng đến trang đổi mật khẩu
-    //     window.location.href = "/change-password"
-    }
-    
-    const handleSignOut = async () => {
-    //     try {
-    //         // Nếu backend yêu cầu logout API
-    //         await fetch("http://localhost:8000/api/logout", {
-    //             method: "POST",
-    //             credentials: "include", // nếu bạn dùng cookie để lưu session
-    //         })
-    
-    //         // Xóa localStorage nếu bạn lưu token ở đó
-    //         localStorage.removeItem("access_token")
-    
-    //         // Chuyển hướng về trang login
-    //         window.location.href = "/login"
-    //     } catch (error) {
-    //         console.error("Sign out failed", error)
-    //     }
-    }
-    
+    const handlePasswordSubmit = async (changePasswordData: ChangePassword) => {
+        setIsChangingPassword(true);
+        try {
+            await onPasswordChange(changePasswordData);
+            setShowChangePassword(false);
+        } finally {
+            setIsChangingPassword(false);
+        }
+    };
+
+    const openChangePassword = () => {
+        setShowChangePassword(true);
+        setTimeout(() => setAnimatePasswordModal(true), 10); // delay nhỏ để kích hoạt animation
+    };
+
+    const closeChangePassword = () => {
+        setAnimatePasswordModal(false);
+        setTimeout(() => setShowChangePassword(false), 200);
+    };
 
     return (
         <div className="text-white p-6 rounded-2xl w-full max-w-sm space-y-3 shadow-lg bg-[#161616]">
             <div className="relative">
-                <Img 
-                    src={userProfile.avatarUrl} 
-                    alt="avatar" 
-                    className="rounded-md object-cover w-full h-48" 
+                <Img
+                    src={userProfile.avatarUrl}
+                    alt="avatar"
+                    className="rounded-md object-cover w-full h-48"
                     loader={<div className="text-gray-500 p-4">Loading...</div>}
                     unloader={<div className="text-gray-500 p-4">Error loading image</div>}
                 />
-                <button 
+                <button
                     className="absolute top-2 right-2 bg-black/40 hover:bg-gray-800 text-white p-1 rounded-full transform transition duration-200 ease-in-out hover:scale-105"
                     onClick={() => setShowChangeAvatar(true)}
                 >
@@ -61,7 +71,11 @@ export default function ProfileUser({ onDisplayNameChange, ...userProfile }: Pro
             </div>
 
             {showChangeAvatar && (
-                <ChangeAvatar userProfile={userProfile} onClose={() => setShowChangeAvatar(false)} />
+                <ChangeAvatar
+                    userProfile={userProfile}
+                    onAvatarChange={onAvatarChange}
+                    onClose={() => setShowChangeAvatar(false)}
+                />
             )}
 
             <div className="relative text-lg font-bold">
@@ -70,15 +84,16 @@ export default function ProfileUser({ onDisplayNameChange, ...userProfile }: Pro
                         autoFocus
                         value={nameInput}
                         onChange={(e) => setNameInput(e.target.value)}
-                        onBlur={hanldeChangeName}
-                        onKeyDown={(e) => {if (e.key === "Enter") hanldeChangeName()}}
-                    ></Input>
+                        onBlur={handleSaveDisplayName}
+                        onKeyDown={(e) => { if (e.key === "Enter") handleSaveDisplayName() }}
+                        className="bg-zinc-800 text-white border-none"
+                    />
                 ) : (
                     <>
-                        {nameInput}
-                        <button 
+                        {userProfile.displayName}
+                        <button
                             className="absolute right-2 bg-black/40 hover:bg-gray-800 text-white p-1 rounded-full transform transition duration-200 ease-in-out hover:scale-105"
-                            onClick={() => {setEditingName(true)}}
+                            onClick={() => setEditingName(true)}
                         >
                             <LuPencil size={20} />
                         </button>
@@ -95,14 +110,13 @@ export default function ProfileUser({ onDisplayNameChange, ...userProfile }: Pro
             </p>
 
             <div className="text-md pr-3 text-white">
-                <div className="flex justify-between"> 
-                    {/* flex justify-between: cho len 1 hang xong can 2 phan tu ra 2 ben (between la khoang trong) */}
+                <div className="flex justify-between">
                     <p>List</p>
                     <p>{userProfile.moviesInList}</p>
                 </div>
             </div>
 
-            <p className="text-md text-gray-400">Viewing Activites</p>
+            <p className="text-md text-gray-400">Viewing Activities</p>
 
             <div className="text-md pr-3 text-white">
                 <div className="flex justify-between">
@@ -114,18 +128,36 @@ export default function ProfileUser({ onDisplayNameChange, ...userProfile }: Pro
             <div className="flex justify-between">
                 <Button
                     className="w-1/3 bg-red-500 rounded-lg text-white hover:bg-red-900"
-                    onClick={handleSignOut}
-                >   
+                    onClick={onSignOut}
+                >
                     Sign Out
                 </Button>
 
                 <Button
                     className="w-3/5 bg-[#1d1f37] rounded-lg text-white hover:bg-[#292d5a]"
-                    onClick={handleChangePassword}
+                    onClick={openChangePassword}
                 >
                     Change Password
                 </Button>
             </div>
+
+            {/* Custom Modal cho Change Password */}
+            {showChangePassword && (
+                <div className={`h-screen fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-200 ${animatePasswordModal ? "opacity-100" : "opacity-0"}`}>
+                    <div className={`pt-4 px-6 pb-6 rounded-md bg-[#161616] shadow-md w-full max-w-sm transition-all duration-200 ${animatePasswordModal ? "scale-100" : "scale-90"}`}>
+                        <div className="text-white">
+                            <h2 className="text-xl font-bold mb-4">Change Password</h2>
+                            <p className="text-sm text-gray-400 mb-4">Enter your old and new password to update your account.</p>
+                        </div>
+
+                        <ChangePasswordForm
+                            onSubmit={handlePasswordSubmit}
+                            onCancel={closeChangePassword}
+                            isLoading={isChangingPassword}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
-    ) 
+    );
 }
