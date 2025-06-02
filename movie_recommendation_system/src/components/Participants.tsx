@@ -75,9 +75,9 @@ export default function Participants({
                                     <span className="text-xs text-gray-500">{isHost ? "Room Master" : "Participants"}</span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2 text-black">
-                                {isMicOn ? ( <Mic /> ) : ( <MicOff /> ) }
-                            </div>
+                            {/*<div className="flex items-center gap-2 text-black">*/}
+                            {/*    {isMicOn ? ( <Mic /> ) : ( <MicOff /> ) }*/}
+                            {/*</div>*/}
                         </div>
                     ))}
                 </div>

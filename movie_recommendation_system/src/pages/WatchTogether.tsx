@@ -172,27 +172,27 @@ export default function WatchTogether() {
                            border-zinc-600 border-1 gap-4
                            rounded-lg w-fit mx-auto p-4 mt-4 mb-2"
             >
-                <div
-                    className="justify-center items-center
-                               border-zinc-600 border-1 rounded-lg"
-                >
-                    <Button
-                        className="bg-black m-1"
-                        onClick={() => setIsMicOn(!isMicOn)}
-                    >
-                        {isMicOn ? (
-                            <HiOutlineMicrophone
-                                className="text-white-600 scale-150
-                                           transition-transform duration-300"
-                            />
-                        ) : (
-                            <FaMicrophoneSlash
-                                className="text-white-600 scale-150
-                                           transition-transform duration-300"
-                            />
-                        )}
-                    </Button>
-                </div>
+                {/*<div*/}
+                {/*    className="justify-center items-center*/}
+                {/*               border-zinc-600 border-1 rounded-lg"*/}
+                {/*>*/}
+                {/*    <Button*/}
+                {/*        className="bg-black m-1"*/}
+                {/*        onClick={() => setIsMicOn(!isMicOn)}*/}
+                {/*    >*/}
+                {/*        {isMicOn ? (*/}
+                {/*            <HiOutlineMicrophone*/}
+                {/*                className="text-white-600 scale-150*/}
+                {/*                           transition-transform duration-300"*/}
+                {/*            />*/}
+                {/*        ) : (*/}
+                {/*            <FaMicrophoneSlash*/}
+                {/*                className="text-white-600 scale-150*/}
+                {/*                           transition-transform duration-300"*/}
+                {/*            />*/}
+                {/*        )}*/}
+                {/*    </Button>*/}
+                {/*</div>*/}
                 <div
                     className="justify-center items-center rounded-lg
                     bg-red-500 hover:bg-red-600 p-1"
