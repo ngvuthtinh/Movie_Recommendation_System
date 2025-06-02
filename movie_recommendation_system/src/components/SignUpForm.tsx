@@ -23,7 +23,7 @@ export default function SignUpForm() {
             console.log("Registration successful:", resData);
 
             // Store the tokens
-            localStorage.setItem("token", resData.access_token);
+            localStorage.setItem("user_token", resData.access_token);
             localStorage.setItem("token_type", resData.token_type);
 
             // Navigate to login

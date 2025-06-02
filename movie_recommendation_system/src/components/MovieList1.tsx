@@ -36,7 +36,7 @@ export default function MovieList1({ typeOfRecommendation }: MovieList1Props) {
             }
         };
 
-        if (localStorage.getItem('token')) {
+        if (localStorage.getItem('user_token')) {
             fetchMovies();
         } else {
             setLoading(false);

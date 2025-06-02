@@ -29,6 +29,10 @@ export default function RegisterRoomForm({
         try {
             const response = await CreateRoom(data);
             console.log("Room created successfully:", response);
+
+            localStorage.setItem("room_token", response.access_token);
+            localStorage.setItem("token_type", response.token_type);
+
             setRoomForm(null); // Close the form after successful registration
         } catch (error) {
             console.error('Failed to create room:', error);

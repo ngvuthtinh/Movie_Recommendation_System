@@ -28,7 +28,7 @@ export default function LoginRoomForm({
             const response = await LoginRoom(data);
             console.log("Login successful:", response);
 
-            localStorage.setItem("access_token", response.access_token);
+            localStorage.setItem("room_token", response.access_token);
             localStorage.setItem("token_type", response.token_type);
 
             // Navigate to the home page or the room page
