@@ -1,5 +1,6 @@
 import ReactPlayer from "react-player";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { participantDefault } from "@/types/Participants.ts";
 import { roomInfoDefault } from "@/types/RoomInfo.ts";
 
@@ -14,10 +15,14 @@ import { HiOutlineMicrophone } from "react-icons/hi";
 import { FaMicrophoneSlash } from "react-icons/fa6";
 import { Info, Users, MessageSquareText } from "lucide-react";
 
+
 export default function WatchTogether() {
     const [isMicOn, setIsMicOn] = useState(true);
 
     const [activePanel, setActivePanel] = useState<"chat" | "roomDetail" | "participants" | null>(null);
+
+    const { roomId } = useParams<{ roomId: string }>();
+
 
     return (
         <div className="bg-black h-screen flex flex-col">
@@ -30,7 +35,7 @@ export default function WatchTogether() {
                        overflow-hidden bg-gray-900 h-full"
                     >
                         <ReactPlayer
-                            url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            url=""
                             className="react-player"
                             width="100%"
                             height="100%"
@@ -42,7 +47,7 @@ export default function WatchTogether() {
 
                 {/* Side Panel */}
                 <div className="h-full">
-                    {activePanel === "chat" && <ChatFrame setActivePanel={setActivePanel} />}
+                    {activePanel === "chat" && <ChatFrame setActivePanel={setActivePanel} roomId={roomId || ""}  />}
                     {activePanel === "roomDetail" && <RoomDetail roomDetail={roomInfoDefault} setActivePanel={setActivePanel} />}
                     {activePanel === "participants" && <Participants participants={participantDefault} setActivePanel={setActivePanel}/>}
                 </div>

@@ -4,7 +4,7 @@ import { IMovieList1 } from '../types/MovieList1';
 const API_BASE_URL = 'http://127.0.0.1:8000'; 
 
 const getAuthToken = (): string | null => { 
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('user_token');
     if (!token) {
         return null; 
     }

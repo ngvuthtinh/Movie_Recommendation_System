@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from app.schemas.token import TokenData
+from app.schemas.token import TokenDataUser, TokenDataRoom
 
 import os
 import jwt
@@ -29,18 +29,29 @@ if ACCESS_TOKEN_EXPIRE_MINUTES <= 0:
 
 def create_token_access(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def verify_token(token: str, credentials_exception):
+def verify_user_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenDataUser(username=username)
+    except jwt.PyJWTError:
+        raise credentials_exception
+    return token_data
+
+def verify_room_token(token: str, credentials_exception):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        room_id: str = payload.get("sub")
+        if room_id is None:
+            raise credentials_exception
+        token_data = TokenDataRoom(room_id=room_id)
     except jwt.PyJWTError:
         raise credentials_exception
     return token_data

@@ -1,24 +1,18 @@
 import { Play, BookmarkPlus, ThumbsUp, Star } from "lucide-react"
-import { type MovieDetail2Props, defaultMovieProps } from "../types/DetailMovie2"
+import { MovieDetail2Props } from "../types/DetailMovie2"
 import { SiNetflix } from "react-icons/si";
+
+const InfoRow = ({ label, items, maxItems = 5 }: { label: string; items: string[]; maxItems?: number }) => (
+    <div className="grid grid-cols-[200px_1fr]">
+      <div className="text-gray-500 font-normal">{label}</div>
+      <div className="text-white">{items.slice(0, maxItems).join(", ")}</div>
+    </div>
+);
+
 export default function DetailMovie_2(props: MovieDetail2Props) {
-  // Merge provided props with default props
-  const {
-    id,
-    title,
-    rating,
-    year,
-    duration,
-    matchPercentage,
-    description,
-    genres,
-    productionCompanies,
-    languages,
-    keywords,
-  } = {
-    ...defaultMovieProps,
-    ...props,
-  }
+    if (!props) {
+        return <div className="text-center text-white">Loading...</div>;
+    }
 
   return (
     <div className="max-w-2xl mx-auto bg-white rounded overflow-hidden">
@@ -26,9 +20,9 @@ export default function DetailMovie_2(props: MovieDetail2Props) {
       <div className="bg-black p-6 text-white">
         {/* Movie title and rating */}
         <div className="flex justify-between items-center mb-3">
-          <h1 className="text-5xl font-bold">{title}</h1>
+          <h1 className="text-5xl font-bold">{props.title}</h1>
           <div className="flex items-center gap-1 ml-4">
-            <span className="text-2xl text-yellow-400 font-bold">{rating}</span>
+            <span className="text-2xl text-yellow-400 font-bold">{props.rating}</span>
             <Star size={24} fill="#FACC15" color="#FACC15" />
           </div>
         </div>
@@ -36,17 +30,18 @@ export default function DetailMovie_2(props: MovieDetail2Props) {
         {/* Movie metadata row */}
         <div className="flex items-center gap-2 mb-4 text-sm">
           <SiNetflix className="text-red-600" size={20} />
-          <span>{rating}</span>
+          <span>{props.rating}</span>
           <span className="mx-1 text-gray-500">:</span>
-          <span>{year}</span>
+          <span>{props.year}</span>
           <span className="mx-1 text-gray-500">:</span>
-          <span>{duration}</span>
-          <span className="mx-1 text-gray-500">:</span>
-          <span className="text-green-400">{matchPercentage}% Match</span>
+          <span>{props.duration}</span>
+          {/*TODO: them6 cái percentage chỗ này, tao comment ben6 types nua*/}
+          {/*<span className="mx-1 text-gray-500">:</span>*/}
+          {/*<span className="text-green-400">{props.matchPercentage}% Match</span>*/}
         </div>
 
         {/* Movie description */}
-        <p className="mb-5 text-base leading-relaxed">{description}</p>
+        <p className="mb-5 text-base leading-relaxed">{props.description}</p>
 
         {/* Action buttons */}
         <div className="flex items-center gap-3 mb-6">
@@ -66,25 +61,10 @@ export default function DetailMovie_2(props: MovieDetail2Props) {
 
         {/* Additional information - Styled to match the image exactly */}
         <div className="space-y-2 text-base">
-          <div className="grid grid-cols-[200px_1fr]">
-            <div className="text-gray-500 font-normal">Production Companies</div>
-            <div className="text-white">{productionCompanies.join(", ")}</div>
-          </div>
-
-          <div className="grid grid-cols-[200px_1fr]">
-            <div className="text-gray-500 font-normal">Language</div>
-            <div className="text-white">{languages.join(", ")}</div>
-          </div>
-
-          <div className="grid grid-cols-[200px_1fr]">
-            <div className="text-gray-500 font-normal">Genre</div>
-            <div className="text-white">{genres.join(", ")}</div>
-          </div>
-
-          <div className="grid grid-cols-[200px_1fr]">
-            <div className="text-gray-500 font-normal">Keywords</div>
-            <div className="text-white">{keywords.join(", ")}</div>
-          </div>
+            <InfoRow label="Genres:" items={props.genres} />
+            <InfoRow label="Production Companies:" items={props.productionCompanies} />
+            <InfoRow label="Languages:" items={props.languages} />
+            <InfoRow label="Keywords:" items={props.keywords} />
         </div>
       </div>
     </div>

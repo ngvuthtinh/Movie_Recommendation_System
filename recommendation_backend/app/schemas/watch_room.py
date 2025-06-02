@@ -14,3 +14,7 @@ class RoomOut(BaseModel):
 class RoomLogin(BaseModel):
     room_name: str
     password: str
+
+class Message(BaseModel):
+    user_id: int
+    content: str

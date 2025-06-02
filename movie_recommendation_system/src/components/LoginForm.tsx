@@ -12,6 +12,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<LoginFormValues>()
 
@@ -22,13 +23,27 @@ export default function LoginForm() {
       const resData = await login(data);
       console.log(resData)
       // Store the token in localStorage
-      localStorage.setItem("token", resData.access_token);
+      localStorage.setItem("user_token", resData.access_token);
       localStorage.setItem("token_type", resData.token_type);
 
-      navigate("/home")
-    } catch (error) {
-      console.error("Login failed:", error)
+      navigate("/home");
+    } catch (error: any) {
+        // Show error in the email field
+      alert(error.message);
+      setError('email', {
+        type: 'manual',
+        message: error.message
+      });
+      // Optionally, you can also set an error for the password field
+      setError('password', {
+        type: 'manual',
+        message: error.message
+      });
     }
+  }
+
+  const handleNavigateToSignUp = () => {
+    navigate('/register');
   }
 
   return (
@@ -78,15 +93,14 @@ export default function LoginForm() {
               Login
             </Button>
 
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
-
             <p className="text-center text-sm text-gray-500">
               Don't have an account?{" "}
-              <a href="#" className="underline">
-                Sign up
-              </a>
+              <span
+                  className="underline cursor-pointer text-blue-500 hover:text-blue-700"
+                  onClick={handleNavigateToSignUp}
+              >
+                  Sign up
+                </span>
             </p>
           </form>
         </CardContent>

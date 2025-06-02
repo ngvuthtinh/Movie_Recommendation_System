@@ -28,11 +28,12 @@ export default function LoginRoomForm({
             const response = await LoginRoom(data);
             console.log("Login successful:", response);
 
-            localStorage.setItem("access_token", response.access_token);
+            localStorage.setItem("room_token", response.access_token);
             localStorage.setItem("token_type", response.token_type);
 
             // Navigate to the home page or the room page
-            navigate("/watch");
+            navigate(`/watch/${response.room_id}`);
+            setRoomForm(null); // Close the form after successful login
         } catch (error) {
             console.error("Login failed:", error);
 

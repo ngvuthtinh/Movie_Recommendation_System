@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { RoomInfo } from "@/types/RoomInfo";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,15 @@ export default function RoomDetail({
 }) {
     const [showPassword, setShowPassword] = useState(false);
 
+    const copyToClipboard = async (text: string, type: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            toast.success(`${type} copied to clipboard`);
+        } catch (err) {
+            toast.error("Failed to copy to clipboard");
+        }
+    };
+
     return (
         <div className="bg-white border-1 border-black rounded-lg
                         w-[21.25vw] h-full flex flex-col m-4">
@@ -30,19 +40,18 @@ export default function RoomDetail({
                 </div>
 
                 <div>
-                    <h1 className="text-lg font-bold text-black">Room name</h1>
-                    <p className="text-black font-normal text-base mt-2">{roomDetail.roomName}</p>
-                </div>
-
-                <div>
-                    <h1 className="text-lg font-bold text-black">Room ID</h1>
+                    <h1 className="text-lg font-bold text-black">Room Name</h1>
+                    <p className="text-black font-normal text-base mt-2">
+                        {roomDetail.roomName}
+                    </p>
                     <Button
                         variant="outline"
                         className="w-full bg-blue-400 text-white flex items-center justify-start
                                    text-left hover:bg-white hover:text-black mt-2"
+                        onClick={() => copyToClipboard(roomDetail.roomName, "Room Name")}
                     >
                         <Copy className="mr-2" />
-                        <span className="flex-1 text-left">{roomDetail.roomID}</span>
+                        <span className="flex-1 text-left">Copy Room Name</span>
                     </Button>
                 </div>
 
@@ -68,9 +77,10 @@ export default function RoomDetail({
                         variant="outline"
                         className="bg-blue-400 text-white hover:bg-white hover:text-black
                                    flex items-center justify-start text-left mt-2"
+                        onClick={() => copyToClipboard(roomDetail.roomPassword, "Room Password")}
                     >
                         <Copy />
-                        <span className="flex-1 text-left">Copy password</span>
+                        <span className="flex-1 text-left">Copy Password</span>
                     </Button>
                 </div>
 

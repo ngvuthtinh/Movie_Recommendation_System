@@ -1,8 +1,6 @@
-# app/schemas/movie.py
 from pydantic import BaseModel
 from datetime import date
-from typing import Optional
-
+from typing import Optional, List
 
 class MovieBase(BaseModel):
     title: str
@@ -33,3 +31,34 @@ class MovieTitleOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class GenreOut(BaseModel):
+    id: int
+    genre_name: str
+
+class CompanyOut(BaseModel):
+    id: int
+    company_name: str
+
+class KeywordOut(BaseModel):
+    id: int
+    word: str
+
+class LanguageOut(BaseModel):
+    id: int
+    language: str
+
+class MovieDetail(BaseModel):
+    id: int
+    title: str
+    vote_average: float
+    release_date: date
+    runtime: int
+    overview: str
+    backdrop_path: str
+    genres: List[GenreOut]
+    keywords: List[KeywordOut]
+    companies: List[CompanyOut]
+    languages: List[LanguageOut]
+
+

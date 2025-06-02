@@ -21,4 +21,4 @@ async def create_room_route(room_create: RoomCreate, db: Session = Depends(get_d
     """
     new_room = create_room_service(db=db, room_create=room_create)
     access_token = create_token_access(data={"sub": str(new_room.id)})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "room_id": new_room.id}
