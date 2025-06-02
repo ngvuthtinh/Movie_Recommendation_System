@@ -1,27 +1,38 @@
-import { useState, useEffect } from 'react';
-import { ChatService } from '../services/ChatService';
-import { ChatMessage } from '../types/Messages.ts';
+import { useState, useEffect, useRef } from 'react';
+import { ChatService } from '../services/ChatService'; // Adjust path if necessary
+import { ChatMessage } from '../types/Messages.ts'; // Adjust path if necessary
 
 export function useChat(roomId: string) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [chatService, setChatService] = useState<ChatService | null>(null);
+    const chatServiceRef = useRef<ChatService | null>(null);
 
     useEffect(() => {
-        const service = new ChatService(roomId);
+        console.log(`useChat: useEffect for roomId: ${roomId} - Setting up ChatService.`);
 
-        service.onMessage((message) => {
-            setMessages(prev => [...prev, message]);
+        const service = new ChatService(roomId);
+        chatServiceRef.current = service;
+
+        const unsubscribe = service.onMessage((message) => {
+            setMessages(prevMessages => [...prevMessages, message]);
         });
 
-        setChatService(service);
-
         return () => {
+            console.log(`useChat: useEffect cleanup for roomId: ${roomId} - Disconnecting ChatService.`);
+            // service.disconnect() is crucial here. It will now also handle
+            // clearing the initialConnectTimeoutId if the service is disconnected
+            // before the initial connection attempt.
             service.disconnect();
+            chatServiceRef.current = null;
+            unsubscribe();
         };
     }, [roomId]);
 
-    const sendMessage = (message: string) => {
-        chatService?.sendMessage(message);
+    const sendMessage = (messageContent: string) => {
+        if (!chatServiceRef.current) {
+            console.error("useChat: ChatService not available to send message.");
+            return;
+        }
+        chatServiceRef.current.sendMessage(messageContent);
     };
 
     return { messages, sendMessage };

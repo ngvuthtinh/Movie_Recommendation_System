@@ -1,4 +1,4 @@
-import { ChatMessage } from '../types/Messages.ts';
+import { ChatMessage } from '../types/Messages.ts'; // Make sure this path is correct
 
 export class ChatService {
     private ws: WebSocket | null = null;
@@ -6,23 +6,34 @@ export class ChatService {
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 3;
     private isConnecting = false;
-    private isPermanentlyClosed = false; // New flag
-    private wsUrl: string; // Store wsUrl for reconnections
+    private isPermanentlyClosed = false;
+    private wsUrl: string;
+    private initialConnectTimeoutId: ReturnType<typeof setTimeout> | null = null; // For deferring initial connect
 
     constructor(roomId: string) {
         const roomToken = localStorage.getItem('room_token');
         const userToken = localStorage.getItem('user_token');
 
         if (!roomToken || !userToken) {
-            console.error('Missing tokens for WebSocket connection');
-            // Consider throwing an error or having a more robust way to signal this failure
-            this.wsUrl = ''; // Or handle invalid state
-            this.isPermanentlyClosed = true; // Prevent connection attempts if tokens are missing
+            console.error('ChatService: Missing tokens for WebSocket connection. Cannot connect.');
+            this.wsUrl = '';
+            this.isPermanentlyClosed = true;
             return;
         }
 
         this.wsUrl = `ws://localhost:8000/room/${roomId}/chat?room_token=${roomToken}&user_token=${userToken}`;
-        this.connect();
+
+        // Defer the initial connection attempt slightly.
+        // This helps in React StrictMode by allowing the cleanup of the first,
+        // short-lived instance to cancel this connection before it happens.
+        this.initialConnectTimeoutId = setTimeout(() => {
+            this.initialConnectTimeoutId = null; // Clear the timeout ID as it has fired
+            if (!this.isPermanentlyClosed) { // Check if disconnect() was called before this timeout
+                this.connect();
+            } else {
+                console.log('ChatService: Initial connect() aborted as service was permanently closed before timeout.');
+            }
+        }, 0); // 0ms timeout defers execution until after current call stack
     }
 
     private connect() {
@@ -31,7 +42,7 @@ export class ChatService {
             return;
         }
 
-        if (this.isConnecting || (this.ws && this.ws.readyState !== WebSocket.CLOSED)) {
+        if (this.isConnecting || (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING))) {
             console.log('ChatService: WebSocket connection already in progress or active.',
                 `isConnecting: ${this.isConnecting}`,
                 `readyState: ${this.ws?.readyState}`);
@@ -45,48 +56,40 @@ export class ChatService {
             this.ws = new WebSocket(this.wsUrl);
 
             this.ws.onopen = () => {
-                console.log('ChatService: Connected to chat room');
+                console.log('ChatService: Connected to chat room successfully.');
                 this.reconnectAttempts = 0;
-                this.isConnecting = false; // CORRECTED: connection process finished
+                this.isConnecting = false;
             };
 
             this.ws.onclose = (event) => {
-                // Only log and attempt reconnect if not permanently closed
                 if (!this.isPermanentlyClosed) {
-                    console.error('ChatService: WebSocket closed:', event.code, event.reason);
+                    console.error(`ChatService: WebSocket closed. Code: ${event.code}, Reason: "${event.reason}", Clean: ${event.wasClean}`);
                     this.isConnecting = false;
                     this.handleReconnect();
                 } else {
-                    console.log('ChatService: WebSocket closed (service was permanently closed).');
+                    console.log('ChatService: WebSocket closed (service was permanently closed by client).');
                 }
             };
 
             this.ws.onmessage = (event) => {
                 try {
-                    const message = JSON.parse(event.data) as ChatMessage;
+                    const message = JSON.parse(event.data as string) as ChatMessage;
                     this.messageHandlers.forEach(handler => handler(message));
                 } catch (error) {
-                    console.error('ChatService: Error parsing message:', error);
+                    console.error('ChatService: Error parsing incoming message:', error, 'Data:', event.data);
                 }
             };
 
-            this.ws.onerror = (error) => {
-                // Only log if not permanently closed
+            this.ws.onerror = (errorEvent) => {
                 if (!this.isPermanentlyClosed) {
-                    console.error('ChatService: WebSocket error:', error);
-                    // Note: onclose will usually follow an error, triggering reconnect logic there.
-                    // If onclose doesn't fire, this error might leave the socket in a broken state
-                    // without an explicit reconnect attempt from here.
+                    console.error('ChatService: WebSocket error occurred:', errorEvent);
                 }
-                this.isConnecting = false; // Error means connection attempt failed or existing connection broke
+                this.isConnecting = false;
             };
 
         } catch (error) {
-            console.error('ChatService: Error creating WebSocket:', error);
+            console.error('ChatService: Error creating WebSocket object:', error);
             this.isConnecting = false;
-            // If creation fails, consider if a retry mechanism is needed here,
-            // or if it should rely on an external call to connect() again.
-            // For now, it won't automatically retry if the new WebSocket() constructor itself throws.
         }
     }
 
@@ -98,53 +101,57 @@ export class ChatService {
 
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;
-            console.log(`ChatService: Reconnecting... Attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
-            const delay = Math.pow(2, this.reconnectAttempts -1) * 1000; // Exponential backoff (1s, 2s, 4s)
+            const delay = Math.pow(2, this.reconnectAttempts - 1) * 1000;
+            console.log(`ChatService: Reconnecting... Attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}. Retrying in ${delay / 1000}s.`);
             setTimeout(() => this.connect(), delay);
         } else {
-            console.log('ChatService: Max reconnect attempts reached.');
+            console.log('ChatService: Max reconnect attempts reached. Not attempting further reconnections.');
         }
     }
 
-    public sendMessage(message: string) {
+    public sendMessage(messageContent: string) {
         if (this.isPermanentlyClosed) {
             console.error('ChatService: Cannot send message, service is permanently closed.');
             return;
         }
         if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-            console.error('ChatService: WebSocket not open. Current state:', this.ws?.readyState);
-            // Optional: Queue message or attempt to connect if appropriate
+            console.error('ChatService: WebSocket not open. Cannot send message. Current state:', this.ws?.readyState);
             return;
         }
-        this.ws.send(JSON.stringify({ message })); // Assuming your backend expects {"message": "your_message"}
+        this.ws.send(JSON.stringify({ message: messageContent }));
     }
 
-    public onMessage(handler: (message: ChatMessage) => void) {
+    public onMessage(handler: (message: ChatMessage) => void): () => void {
         this.messageHandlers.push(handler);
-        // Optional: return an unsubscribe function
-        // return () => {
-        //     this.messageHandlers = this.messageHandlers.filter(h => h !== handler);
-        // };
+        return () => {
+            this.messageHandlers = this.messageHandlers.filter(h => h !== handler);
+        };
     }
 
     public disconnect() {
-        console.log('ChatService: Disconnecting...');
+        console.log('ChatService: disconnect() called. Permanently closing this service instance.');
         this.isPermanentlyClosed = true;
-        this.reconnectAttempts = this.maxReconnectAttempts; // Prevent handleReconnect from trying again
+        this.reconnectAttempts = this.maxReconnectAttempts;
+
+        // If there was a pending initial connect timeout, clear it.
+        if (this.initialConnectTimeoutId) {
+            clearTimeout(this.initialConnectTimeoutId);
+            this.initialConnectTimeoutId = null;
+            console.log('ChatService: Cleared pending initial connect timeout.');
+        }
 
         if (this.ws) {
-            // Remove event handlers to prevent them from firing after explicit disconnect
             this.ws.onopen = null;
-            this.ws.onclose = null; // Crucial to prevent onclose triggering handleReconnect
+            this.ws.onclose = null;
             this.ws.onmessage = null;
             this.ws.onerror = null;
 
             if (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING) {
-                this.ws.close();
+                this.ws.close(1000, "Client disconnected");
             }
             this.ws = null;
         }
         this.isConnecting = false;
-        console.log('ChatService: Disconnected.');
+        console.log('ChatService: Service instance has been disconnected.');
     }
 }
