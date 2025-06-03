@@ -27,8 +27,7 @@ const mapMovieOutToIMovieList1 = (movieOut: any): IMovieList1 => {
         popularity: movieOut.popularity,
         backdrop_path: movieOut.backdrop_path,
 
-        // Randomly generated fields from 0 to 100
-        match: Math.floor(Math.random() * 101),
+        match: Math.floor(movieOut.score * 100) || 0, // Default to a random match percentage if score is not available
         isWatched: movieOut.is_watched || false,
         isLoved: movieOut.is_loved || false,
     };

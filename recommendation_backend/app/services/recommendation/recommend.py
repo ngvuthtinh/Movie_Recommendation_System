@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.models.user import WatchRecord, WatchingHistory, FavoriteMovie
 from app.models.movie import Movie
+from app.schemas.movie import MovieOut
 from typing import Optional
 
-def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=10, user_id: Optional[int] = None) -> List[Movie]:
+def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=10, user_id: Optional[int] = None) -> List[MovieOut]:
     """
      Recommend movies based on a given movie ID and recommendation type.
     
@@ -22,6 +23,7 @@ def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=
     similarity_scores = calculate_similarity(movie_id, db, recommendation_type)
     
     recommended_movie_ids = [movie_id for movie_id, score in similarity_scores[: n]]
+    score = [score for movie_id, score in similarity_scores[: n]]
 
     if not recommended_movie_ids:
         return []
@@ -42,15 +44,17 @@ def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=
         ]
     
     movie_map = {movie.id: movie for movie in movies}
+    score_map = {movie.id: score for movie, score in zip(movies, score)}
     
     ordered_movies = [movie_map[movie_id] for movie_id in recommended_movie_ids if movie_id in movie_map]
+    ordered_movies_with_score = [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
 
     return ordered_movies
 
 
 def recommend_for_history(
     db: Session, user_id: int, recommendation_type: str, n=10, history_size=10
-) -> List[Movie]:
+) -> List[MovieOut]:
     """
     Recommend movies based on a user's history.
     Args:
@@ -116,6 +120,9 @@ def recommend_for_history(
         setattr(movie, 'is_loved', movie.id in loved_movie_ids)
 
     movie_map = {movie.id: movie for movie in movies}
-    ordered_movies = [movie_map[mid] for mid in sorted_movies_ids if mid in movie_map]
-    return ordered_movies
+    score_map = {movie.id: score for movie, score in zip(movies, [all_recommendations[mid] for mid in sorted_movies_ids])}
     
+    ordered_movies = [movie_map[mid] for mid in sorted_movies_ids if mid in movie_map]
+    ordered_movies_with_score = [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
+    
+    return ordered_movies

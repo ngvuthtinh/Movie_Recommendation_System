@@ -19,6 +19,7 @@ class MovieBase(BaseModel):
     
 class MovieOut(MovieBase):
     id: int 
+    score: Optional[float] = None
     
     class Config:
         from_attributes = True
