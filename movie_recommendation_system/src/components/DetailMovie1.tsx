@@ -31,16 +31,16 @@ export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
 
         {/* Action buttons */}
         <div className="flex items-center gap-3 mb-4">
-          <button className="bg-red-600 text-white px-4 py-2 rounded flex items-center gap-2 text-sm font-medium">
+          <button className="bg-red-600 text-white px-4 py-2 rounded flex items-center gap-2 text-sm font-medium hover:bg-red-900">
             <Play size={16} className="fill-white" />
             WATCH NOW
           </button>
 
-          <button className="border border-gray-400 p-2 rounded">
+          <button className="border border-gray-400 p-2 rounded hover:bg-gray-700 transition-colors">
             <BookmarkPlus size={20} />
           </button>
 
-          <button className="border border-gray-400 p-2 rounded">
+          <button className="border border-gray-400 p-2 rounded hover:bg-gray-700 transition-colors">
             <ThumbsUp size={20} />
           </button>
         </div>

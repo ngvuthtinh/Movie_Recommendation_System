@@ -8,6 +8,7 @@ export interface MovieDetailProps {
     matchPercentage?: number
     description?: string
     genres?: string[]
+    movieURL?: string
   }
   
   // Default values for the movie props
@@ -21,6 +22,7 @@ export const defaultMovieProps: Required<MovieDetailProps> = {
     description:
       "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
     genres: ["Action", "Science", "Fiction", "Adventure"],
+    movieURL: "https://www.youtube.com/embed/UCXao7aTDQM?si=1A35q-l5s-0iUMb_"
 }
   
   // Utility functions related to movies

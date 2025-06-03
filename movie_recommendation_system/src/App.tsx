@@ -10,11 +10,13 @@ import MyMovieList from './pages/MyMovieList'
 import WatchTogether from './pages/WatchTogether.tsx'
 import FilmPage from './pages/FilmPage.tsx'
 import ProtectedRoutes from "./routes/ProtectedRoutes.tsx";
+import ScrollToTop from './components/ScrollToTop.tsx'
 
 function App() {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />

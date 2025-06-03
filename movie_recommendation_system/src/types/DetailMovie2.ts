@@ -12,6 +12,7 @@ export interface MovieDetail2Props {
     languages: string[]
     keywords: string[]
     backdropPath: string
+    movie_url?: string // Optional URL to watch the movie
 }
 
 // Utility functions related to movies
