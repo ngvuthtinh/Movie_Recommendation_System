@@ -6,6 +6,11 @@ from app.models.movie import Movie
 from app.schemas.movie import MovieOut
 from typing import Optional
 
+""" 
+Step 6: Recommend movies based on similarity scores.
+Recommend movies based on a given movie ID and recommendation type.
+"""
+
 def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=10, user_id: Optional[int] = None) -> List[MovieOut]:
     """
      Recommend movies based on a given movie ID and recommendation type.
@@ -47,7 +52,7 @@ def recommend_for_click(movie_id: int, db: Session, recommendation_type: str, n=
     score_map = {movie.id: score for movie, score in zip(movies, score)}
     
     ordered_movies = [movie_map[movie_id] for movie_id in recommended_movie_ids if movie_id in movie_map]
-    ordered_movies_with_score = [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
+    [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
 
     return ordered_movies
 
@@ -123,6 +128,6 @@ def recommend_for_history(
     score_map = {movie.id: score for movie, score in zip(movies, [all_recommendations[mid] for mid in sorted_movies_ids])}
     
     ordered_movies = [movie_map[mid] for mid in sorted_movies_ids if mid in movie_map]
-    ordered_movies_with_score = [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
+    [setattr(movie, 'score', score_map[movie.id]) for movie in ordered_movies]
     
     return ordered_movies

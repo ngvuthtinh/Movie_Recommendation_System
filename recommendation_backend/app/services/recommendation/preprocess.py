@@ -11,8 +11,18 @@ import os
 
 """
 Step 2: Normalize data for recommendation system.
+Since the data is very diverse, we need to normalize it to ensure that each feature contributes equally to the recommendation scores.
 """
 def normalize_vote_count(vote_count: int, db: Session) -> float:
+    """_summary_
+
+    Args:
+        vote_count (int): total vote count of the movie
+        db (Session): the database session
+
+    Returns:
+        float: the normalized vote count
+    """
     max_vote_count = db.query(Movie).order_by(Movie.vote_count.desc()).first().vote_count
     if max_vote_count == 0:
         return 0.0
@@ -20,16 +30,40 @@ def normalize_vote_count(vote_count: int, db: Session) -> float:
 
 
 def normalize_vote_average(vote_average: float, db: Session) -> float:
+    """_summary_
+
+    Args:
+        vote_average (float): the average vote of the movie
+        db (Session): the database session
+
+    Returns:
+        float: the normalized vote average
+    """
     max_vote_average = db.query(Movie).order_by(Movie.vote_average.desc()).first().vote_average
     return vote_average / max_vote_average if max_vote_average > 0 else 0.0
 
 
 def normalize_popularity(popularity: float, db: Session) -> float:
+    """_summary_
+
+    Args:
+        popularity (float): the popularity score of the movie
+        db (Session): the database session
+
+    Returns:
+        float: the normalized popularity score
+    """
     max_popularity = db.query(Movie).order_by(Movie.popularity.desc()).first().popularity
     return log10(popularity) / log10(max_popularity) if max_popularity > 0 else 0.0
 
 
-def normalize_release_date(release_date: str) -> float:    
+def normalize_release_date(release_date: str) -> float:
+    """_summary_
+    Args:
+        release_date (str): the release date of the movie in 'YYYY-MM-DD' format
+    Returns:
+        float: the normalized release date score
+    """   
     if not release_date:
         return 0.0
     
@@ -61,6 +95,13 @@ Expected output:
     ]
 """
 def create_feature_vectors(db: Session) -> List[Dict]:
+    """_summary_
+
+    Args:
+        db (Session): the database session
+    Returns:
+        List[Dict]: a list of dictionaries containing movie ids and their corresponding feature vectors
+    """
     genres = db.query(Genre).order_by(Genre.id).all()
     keywords = db.query(Keyword).order_by(Keyword.id).all()
 
@@ -97,7 +138,7 @@ def create_feature_vectors(db: Session) -> List[Dict]:
         
     return vectors
 
-
+# Save the feature vectors to a pickle file
 if __name__ == "__main__":
      # Get a database session
     db_gen = get_db()

@@ -6,11 +6,21 @@ from pathlib import Path
 import pickle
 import numpy as np
 
-
+"""
+Step 4: Assign weights to different features for recommendation.
+Assign the weight for each attributes which contribute to the featured vectors of the movies, we have 4 different structure of weighted attributes for recommendations:
+    Recommend for you: define the most affected attributes which affected how the user choose the movies
+    Top Rated: the attributes related about the rating and number of the votes having more weight
+    Trending Now:  the attributes related about the rating and the popularity having more weight
+    New Released: The attributed related to the date having more weight
+"""
 def assign_all_weights(db: Session) -> Dict[str, List[float]]:
-    """
-
-    """
+    """_summary_
+        Args:
+            db (Session): the database session
+        Returns:
+            Dict[str, List[float]]: a weights vector for each recommendation type.
+    """    
     
     genre_count = db.query(Genre).count()
     keyword_count = db.query(Keyword).count()
@@ -45,6 +55,10 @@ def assign_all_weights(db: Session) -> Dict[str, List[float]]:
         result[name] = weights
         
     return result
+
+"""
+Step 5: Calculate similarity between movies based on their feature vectors.
+"""
 
 def get_similarity_cache_path(movie_id: int, strategy: str) -> Path:
     cache_dir = Path(__file__).resolve().parent.parent.parent / "models" / "recommendation_cache"
