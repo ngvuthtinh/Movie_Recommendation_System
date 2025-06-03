@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.services.movie.get_movie import get_movie_detail, get_movie_stream
+from app.services.movie.get_movie import get_movie_detail, get_movie_stream, get_movie_url
 from app.schemas.movie import MovieDetail
 from app.cores.database import get_db
 from app.schemas.movie import MovieLink
@@ -22,3 +22,12 @@ def read_movie_detail(movie_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Movie not found")
     return movie
 
+
+@router.get("/watch/{movie_id}", response_model=MovieLink)
+def watch_movie(movie_id: int, db: Session = Depends(get_db)):
+    movie_url = get_movie_url(db, movie_id)
+    
+    if not movie_url:
+        raise HTTPException(status_code=404, detail="Movie not found or not available for streaming")
+    
+    return MovieLink(id=movie_id, link=movie_url)

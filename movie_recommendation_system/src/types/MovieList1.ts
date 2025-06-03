@@ -1,4 +1,3 @@
-// src/types/MovieList1.ts
 export interface IMovieList1 {
     id: number;
     title: string;
@@ -14,5 +13,6 @@ export interface IMovieList1 {
     tagline?: string;
     match: number; 
     isWatched: boolean; 
-    isLoved: boolean;  
+    isLoved: boolean;
+    movie_url?: string; // URL to watch the movie
 }

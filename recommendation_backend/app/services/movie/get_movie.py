@@ -73,3 +73,14 @@ def get_movie_stream (db: Session, room_id: int) -> MovieLink:
         raise HTTPException(status_code=404, detail="Movie is not available for streaming")
 
     return MovieLink(id=movie.id, link=movie.movie_link)
+
+
+def get_movie_url(db: Session, movie_id: int) -> str:
+    """
+    Get the movie URL for a specific movie by its ID.
+    """
+    movie = db.query(Movie).filter(Movie.id == movie_id).first()
+    if not movie or not movie.movie_link:
+        raise HTTPException(status_code=404, detail="Movie is not available for streaming")
+    
+    return movie.movie_link
