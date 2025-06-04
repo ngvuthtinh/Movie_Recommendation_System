@@ -80,8 +80,8 @@ export default function DetailMovie_2(props: MovieDetail2Props) {
                     <span>{props.year}</span>
                     <span className="mx-1 text-gray-500">:</span>
                     <span>{props.duration}</span>
-                    <span className="mx-1 text-gray-500">:</span>
-                    <span className="text-green-400">{props.matchPercentage}% Match</span>
+                    {/*<span className="mx-1 text-gray-500">:</span>*/}
+                    {/*<span className="text-green-400">{props.matchPercentage}% Match</span>*/}
                 </div>
 
                 <p className="mb-5 text-base leading-relaxed">{props.description}</p>
