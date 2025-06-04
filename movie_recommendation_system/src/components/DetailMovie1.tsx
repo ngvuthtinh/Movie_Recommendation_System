@@ -1,12 +1,16 @@
 import { Play, BookmarkPlus, ThumbsUp } from "lucide-react";
 import { MovieDetailProps, defaultMovieProps } from '../types/DetailMovie1';
 import { SiNetflix } from "react-icons/si";
+import { useNavigate } from 'react-router-dom';
+
 export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
   // Merge provided props with default props
   const { id, title, rating, year, duration, matchPercentage, description, genres } = {
     ...defaultMovieProps,
     ...props,
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-lg mx-auto rounded overflow-hidden">
@@ -31,7 +35,9 @@ export default function DetailMovie_1(props: Partial<MovieDetailProps>) {
 
         {/* Action buttons */}
         <div className="flex items-center gap-3 mb-4">
-          <button className="bg-red-600 text-white px-4 py-2 rounded flex items-center gap-2 text-sm font-medium hover:bg-red-900">
+          <button
+              className="bg-red-600 text-white px-4 py-2 rounded flex items-center gap-2 text-sm font-medium hover:bg-red-900"
+              onClick={() => navigate(`/film/${id}`)}>
             <Play size={16} className="fill-white" />
             WATCH NOW
           </button>
