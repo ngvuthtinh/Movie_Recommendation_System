@@ -124,7 +124,7 @@ def create_feature_vectors(db: Session) -> List[Dict]:
         release_date_normalized = normalize_release_date(str(movie.release_date))
         
         # Create the feature vector for this movie
-        featutre_vector = genre_vector + keyword_vector + [
+        feature_vector = genre_vector + keyword_vector + [
             vote_avg_normalized,
             vote_count_normalized,
             popularity_normalized,
@@ -133,7 +133,7 @@ def create_feature_vectors(db: Session) -> List[Dict]:
 
         vectors.append({
             "movie_id": movie.id,
-            "feature_vector": featutre_vector
+            "feature_vector": feature_vector
         })
         
     return vectors
